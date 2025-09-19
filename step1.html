@@ -55,6 +55,31 @@
     .btn[disabled]{opacity:.45; cursor:not-allowed}
     .trophy{width:42px; height:42px; border-radius:50%; display:grid; place-items:center; background:radial-gradient(50% 50% at 50% 50%, rgba(52,211,153,.9), rgba(14,165,233,.85)); box-shadow:0 6px 22px rgba(14,165,233,.25)}
     .muted{color:var(--muted)}
+
+    /* === Overrides: подписи и отступ превью === */
+
+/* Убрать подписи под картинками */
+.step figure figcaption{
+  display: none !important;
+}
+
+/* Превью чуть ниже заголовка/текста */
+.step figure{
+  margin: 24px 0 12px;   /* было 12px 0; можно увеличить до 28–32px */
+}
+
+/* На всякий случай: контролируем высоту и вписывание */
+.step figure .media{
+  aspect-ratio: 16 / 9;  /* можно 4/3, если хотите превью выше */
+  width: 100%;
+  display: flex; align-items: center; justify-content: center;
+  background: #fff; overflow: hidden; border-bottom: 1px solid var(--line);
+}
+.step figure img{
+  max-width: 100%; max-height: 100%;
+  width: auto; height: auto; object-fit: contain; display: block;
+}
+
   </style>
 </head>
 <body>
@@ -343,6 +368,7 @@
   </script>
 </body>
 </html>
+
 
 
 
