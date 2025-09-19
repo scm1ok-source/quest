@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Квест «Перекодировка через свойства» — Пошаговая инструкция</title>
+  <style>
+    /* === БАЗОВАЯ ТЕМА (светлая) === */
+    :root{
+      --bg:#ffffff; --text:#1e293b; --muted:#475569; --line:#e2e8f0; --card:#f8fafc;
+      --accent:#0ea5e9; --accent-2:#6366f1; --ok:#16a34a; --warn:#d97706; --err:#dc2626;
+    }
+    html,body{height:100%}
+    body{margin:0; background:var(--bg); color:var(--text);
+      font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,"Helvetica Neue",Arial,"Apple Color Emoji","Segoe UI Emoji"}
+    .container{max-width:1100px; margin-inline:auto; padding:32px 20px 80px}
+    header{display:grid; gap:12px; margin-bottom:20px}
+    header h1{font-size:clamp(26px,3vw,36px); margin:0}
+    header p{margin:0; color:var(--muted)}
+    .badge{display:inline-flex; align-items:center; gap:8px; background:#e0f2fe; border:1px solid #7dd3fc; color:#0369a1; padding:6px 10px; border-radius:999px; font-size:13px}
+    .kbd{display:inline-block; padding:.15em .45em; border:1px solid #cbd5e1; border-radius:6px; background:#f1f5f9; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:.9em}
+
+    /* Карточки и сетки */
+    .card{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px; margin-top:16px}
+    .card h2,.card h3{margin-top:0}
+    .grid{display:grid; gap:16px}
+    .two{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .three{grid-template-columns:repeat(3,minmax(0,1fr))}
+    @media (max-width:920px){.two,.three{grid-template-columns:1fr}}
+
+    /* Шаги, плейсхолдеры изображений */
+    .step{position:relative; padding:16px; border-radius:12px; border:1px dashed #cbd5e1; background:#fff}
+    .fig{display:grid; place-items:center; background:#fff; border:2px dashed #cbd5e1; border-radius:12px; padding:14px; min-height:140px; color:#64748b; text-align:center}
+    .fig strong{color:#0f172a}
+    .need{background:#ecfeff; border:1px solid #67e8f9; color:#0369a1; border-radius:10px; padding:10px; font-size:14px}
+
+    /* Чек-лист, прогресс, подсказки */
+    .checklist label{display:flex; align-items:flex-start; gap:10px; margin:10px 0; cursor:pointer}
+    .checklist input[type="checkbox"]{width:18px; height:18px; accent-color:var(--ok)}
+    .progress{height:8px; background:#e5e7eb; border:1px solid #e5e7eb; border-radius:999px; overflow:hidden}
+    .progress>span{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--accent),var(--accent-2)); transition:width .25s ease}
+    .tip{display:inline-flex; align-items:center; gap:6px; color:var(--accent); cursor:pointer}
+    .popover{position:relative; display:inline-block}
+    .popover-content{position:absolute; inset:auto auto auto 0; transform:translateY(8px); min-width:260px; background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px; box-shadow:0 10px 30px rgba(2,6,23,.12); display:none}
+    .popover[data-open="true"] .popover-content{display:block}
+
+    /* Таблица-пример */
+    table{width:100%; border-collapse:collapse}
+    th,td{border:1px solid var(--line); padding:8px 10px}
+    th{background:#eef2ff}
+
+    /* Итог */
+    .cta{display:flex; align-items:center; justify-content:space-between; gap:14px; margin-top:20px}
+    .btn{appearance:none; border:none; border-radius:12px; padding:12px 16px; font-weight:700; cursor:pointer; color:#fff; background:linear-gradient(135deg, var(--ok), #22c55e)}
+    .btn[disabled]{opacity:.45; cursor:not-allowed}
+    .trophy{width:42px; height:42px; border-radius:50%; display:grid; place-items:center; background:radial-gradient(50% 50% at 50% 50%, rgba(52,211,153,.9), rgba(14,165,233,.85)); box-shadow:0 6px 22px rgba(14,165,233,.25)}
+    .muted{color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="badge">Квест «Перекодировка через свойства»</span>
+      <h1>Пошаговый гайд для первого прохождения</h1>
+      <p>Цель: научиться использовать перекодировку переменных с помощью атрибутов и функции <span class="kbd">recode by attribute</span> в онлайн‑конструкторе анкет.</p>
+      <div class="card" style="margin-top:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+          <strong>Прогресс квеста</strong>
+          <span class="muted" id="progress-label">0% выполнено</span>
+        </div>
+        <div class="progress" aria-label="Прогресс"><span id="progress-bar"></span></div>
+      </div>
+    </header>
+
+    <!-- Функции конструктора, которые понадобятся -->
+    <section class="card">
+      <h2>0) Что понадобится</h2>
+      <div class="grid three">
+        <div class="step">
+            <h3>Поле <span class="kbd">Raw</span> режим для списков</h3>
+          $1<p class="muted">Это способ вставить <strong>весь список ответов разом</strong> через стандартный <strong>Copy/Paste</strong>.</p>
+<div class="fig">https://github.com/scm1ok-source/quest/blob/main/Raw1.png</div>
+        </div>
+        <div class="step">
+          https://github.com/scm1ok-source/quest/blob/main/Raw1.png
+        </div>
+        <div class="step">
+          <h3>Правило <span class="kbd">recode by property</span></h3>
+          <p class="muted">Перекодировка по значению свойства у исходных ответов Q1 (например, <span class="kbd">NewShine</span>).</p>
+          <div class="fig">https://github.com/scm1ok-source/quest/blob/main/Raw1.png</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Гайд: как вставлять скриншоты на GitHub / GitHub Pages -->
+           <div class="need">
+          ✅ Готовые имена файлов, которые ожидает макет: <strong>raw1.png</strong>, <strong>FilterAndPen.png</strong>, <strong>Recode.png</strong> (папка <span class="kbd">assets/img/</span>).
+        </div>
+      </div>
+    </section>
+
+    <!-- Шаг 1 -->
+    <section class="card" id="step1">
+      <h2>1) Подготовьте Excel с колонками <span class="kbd">code</span>, <span class="kbd">text</span>, <span class="kbd">NewShine</span></h2>
+      <div class="step">
+        <ol>
+          <li>Создайте файл Excel с тремя колонками: <strong>code</strong>, <strong>text</strong>, <strong>NewShine</strong>.</li>
+          <li>Заполните 10 строк: в <strong>code</strong> — исходный код, в <strong>text</strong> — текст ответа, в <strong>NewShine</strong> — целевая группа <strong>A/B/C</strong>.</li>
+        </ol>
+        <div class="fig">[СКРИНШОТ_1: Excel — таблица с 10 строками и колонками code/text/NewShine]</div>
+        <div class="need">
+          📸 <strong>Нужны картинки:</strong>
+          <ul>
+            <li>Excel-таблица (полный кадр, видно названия колонок и 10 строк).</li>
+            <li>Кадр с выделением трёх колонок (подпись: «Выделите все данные для копирования»).</li>
+          </ul>
+        </div>
+        <details style="margin-top:10px">
+          <summary class="tip">Показать пример данных (CSV ;)</summary>
+          <pre>01;Вариант 1;A
+02;Вариант 2;A
+03;Вариант 3;A
+04;Вариант 4;A
+05;Вариант 5;B
+06;Вариант 6;B
+07;Вариант 7;B
+08;Вариант 8;C
+09;Вариант 9;C
+10;Вариант 10;C</pre>
+        </details>
+        <div class="checklist" data-step="1">
+          <label><input type="checkbox"> Файл Excel создан</label>
+          <label><input type="checkbox"> 10 строк заполнены</label>
+          <label><input type="checkbox"> Значения A/B/C указаны в колонке <span class="kbd">NewShine</span></label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Шаг 2 -->
+    <section class="card" id="step2">
+      <h2>2) Скопируйте таблицу в поле <span class="kbd">Raw</span> у исходного вопроса (Q1)</h2>
+      <div class="step">
+        <ol>
+          <li>Откройте вопрос <strong>Q1</strong> в режиме редактирования.</li>
+          <li>Перейдите: <strong>Дополнительно → Raw</strong>.</li>
+          <li>Вставьте строки формата <code>code;text;NewShine</code> и нажмите <strong>Сохранить</strong>.</li>
+        </ol>
+        <div class="fig">[СКРИНШОТ_2: Кнопка/вкладка «Raw» и пустое поле ввода]</div>
+        <div class="fig">[СКРИНШОТ_3: То же поле «Raw» после вставки 10 строк]</div>
+        <div class="need">
+          📸 <strong>Нужны картинки:</strong>
+          <ul>
+            <li>Окно редактора Q1 с подсветкой вкладки «Raw/Дополнительно».</li>
+            <li>Поле «Raw» до и после вставки.</li>
+            <li>Кнопка «Сохранить/Применить» (желательно с подсветкой).</li>
+          </ul>
+        </div>
+        <div class="checklist" data-step="2">
+          <label><input type="checkbox"> Найдена вкладка/кнопка <span class="kbd">Raw</span></label>
+          <label><input type="checkbox"> Вставлены строки формата <span class="kbd">code;text;NewShine</span></label>
+          <label><input type="checkbox"> Изменения сохранены</label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Шаг 3 -->
+    <section class="card" id="step3">
+      <h2>3) Вернитесь в окно конструктора</h2>
+      <div class="step">
+        <p>Закройте диалог <span class="kbd">Raw</span> и убедитесь, что Q1 сохранён. Свойство <span class="kbd">NewShine</span> записано внутри вариантов Q1 (внешне список не меняется).</p>
+        <div class="fig">[СКРИНШОТ_4: Общий вид редактора вопроса Q1 после сохранения]</div>
+        <div class="need">
+          📸 <strong>Нужны картинки:</strong>
+          <ul>
+            <li>Экран редактора Q1 после сохранения (обычный вид).</li>
+          </ul>
+        </div>
+        <div class="checklist" data-step="3">
+          <label><input type="checkbox"> Окно <span class="kbd">Raw</span> закрыто</label>
+          <label><input type="checkbox"> Изменения в Q1 сохранены</label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Шаг 4 -->
+    <section class="card" id="step4">
+      <h2>4) Создайте второй вопрос Single Choice (Q2) с вариантами A/B/C</h2>
+      <div class="step">
+        <ol>
+          <li>Добавьте новый вопрос <strong>Single Choice</strong> — <strong>Q2</strong>.</li>
+          <li>Создайте варианты ответа: <strong>A</strong>, <strong>B</strong>, <strong>C</strong>.</li>
+        </ol>
+        <div class="fig">[СКРИНШОТ_5: Создание нового вопроса Q2 типа Single Choice]</div>
+        <div class="fig">[СКРИНШОТ_6: Экран редактирования Q2 с тремя вариантами A/B/C]</div>
+        <div class="need">
+          📸 <strong>Нужны картинки:</strong>
+          <ul>
+            <li>Форма добавления нового вопроса (тип Single Choice).</li>
+            <li>Заполненный список вариантов A/B/C в Q2.</li>
+          </ul>
+        </div>
+        <div class="checklist" data-step="4">
+          <label><input type="checkbox"> Создан вопрос Q2 типа Single Choice</label>
+          <label><input type="checkbox"> Добавлены варианты A/B/C</label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Шаг 5 -->
+    <section class="card" id="step5">
+      <h2>5) Настройте фильтр <span class="kbd">recode by attribute</span> для Q2</h2>
+      <div class="step">
+        <ol>
+          <li>Откройте панель логики/фильтров у Q2 и нажмите иконку фильтра.</li>
+          <li>Выберите правило <strong>Recode → recode by attribute</strong> и нажмите «карандаш» для редактирования.</li>
+          <li>В поле <em>Source question</em> укажите <strong>Q1</strong>. В <em>Property name</em> введите <strong>NewShine</strong>.</li>
+          <li>Сохраните правило. В предпросмотре проверьте соответствия: выбор в Q1 → A/B/C в Q2.</li>
+        </ol>
+        <div class="fig">[СКРИНШОТ_7: Выбор «recode by attribute»]</div>
+        <div class="fig">[СКРИНШОТ_8: Форма с полями Source=Q1 и Property=NewShine]</div>
+        <div class="fig">[СКРИНШОТ_9: Предпросмотр — выбран вариант Q1, подсветился A/B/C в Q2]</div>
+        <div class="need">
+          📸 <strong>Нужны картинки:</strong>
+          <ul>
+            <li>Список фильтров Q2 с подсветкой иконки фильтра и «карандаша».</li>
+            <li>Экран настройки «recode by attribute».</li>
+            <li>Предпросмотр соответствия Q1 → Q2.</li>
+          </ul>
+        </div>
+        <details style="margin-top:10px">
+          <summary class="tip">Показать пример XML (схематично)</summary>
+<pre>&lt;Question id="Q1" type="single"&gt;
+  &lt;Answers&gt;
+    &lt;Answer code="01" text="Вариант 1"&gt;&lt;Property name="NewShine" value="A"/&gt;&lt;/Answer&gt;
+    ...
+  &lt;/Answers&gt;
+&lt;/Question&gt;
+
+&lt;Question id="Q2" type="single"&gt;
+  &lt;Answers&gt;
+    &lt;Answer code="A" text="A"/&gt;
+    &lt;Answer code="B" text="B"/&gt;
+    &lt;Answer code="C" text="C"/&gt;
+  &lt;/Answers&gt;
+  &lt;Logic&gt;
+    &lt;Recode source="Q1" by="attribute" name="NewShine"/&gt;
+  &lt;/Logic&gt;
+&lt;/Question&gt;</pre>
+        </details>
+        <div class="checklist" data-step="5">
+          <label><input type="checkbox"> Открыта панель фильтров у Q2</label>
+          <label><input type="checkbox"> Выбрано «recode by attribute» и открыт редактор</label>
+          <label><input type="checkbox"> Указаны Source=Q1 и Property=NewShine</label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Частые ошибки -->
+    <section class="card" id="mistakes">
+      <h2>Частые ошибки и быстрые решения</h2>
+      <div class="grid two">
+        <div class="step"><strong>Неверный разделитель</strong><br><span class="muted">Ожидается «;». Если вставили запятые — замените на «;».</span></div>
+        <div class="step"><strong>Опечатка в названии свойства</strong><br><span class="muted">«NewShine» должно совпадать до символа.</span></div>
+        <div class="step"><strong>Нет вариантов A/B/C в Q2</strong><br><span class="muted">Добавьте их вручную перед настройкой recode.</span></div>
+        <div class="step"><strong>Источник не тот</strong><br><span class="muted">В Source должен быть выбран именно Q1.</span></div>
+      </div>
+    </section>
+
+    <!-- Итог -->
+    <section class="card" id="finish">
+      <h2>Итог и совет</h2>
+      <p><strong>Резюме:</strong> вы научились сжимать длинные списки в аккуратный A/B/C‑вопрос через свойство и «recode by attribute». Храните маппинги в колонках‑свойствах — это ускоряет отчётность и снижает ошибки.</p>
+      <p class="muted">Совет: версионируйте свойства, например <span class="kbd">NewShine_v1</span>, <span class="kbd">NewShine_v2</span>, и храните Excel‑историю изменений.</p>
+
+      <div class="cta">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="trophy" id="trophy" style="opacity:.35; filter:grayscale(1)" title="Квест‑пройден"></div>
+          <div>
+            <div><strong>«Квест‑пройден»</strong> активируется, когда все чек‑листы отмечены.</div>
+            <div class="muted">Кнопка станет доступной автоматически.</div>
+          </div>
+        </div>
+        <button class="btn" id="doneBtn" disabled>Выполнено</button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Прогресс по чек-листам
+    (function(){
+      const checks = Array.from(document.querySelectorAll('.checklist input[type="checkbox"]'));
+      const bar = document.getElementById('progress-bar');
+      const label = document.getElementById('progress-label');
+      const doneBtn = document.getElementById('doneBtn');
+      const trophy = document.getElementById('trophy');
+      function update(){
+        const done = checks.filter(c=>c.checked).length;
+        const total = checks.length || 1;
+        const pct = Math.round(done/total*100);
+        if(bar) bar.style.width = pct + '%';
+        if(label) label.textContent = pct + '% выполнено';
+        if(pct === 100){
+          doneBtn.removeAttribute('disabled');
+          if(trophy){trophy.style.opacity = 1; trophy.style.filter = 'none';}
+        } else {
+          doneBtn.setAttribute('disabled','');
+          if(trophy){trophy.style.opacity = .35; trophy.style.filter = 'grayscale(1)';}
+        }
+      }
+      checks.forEach(c=> c.addEventListener('change', update));
+      update();
+      doneBtn && doneBtn.addEventListener('click', ()=>{
+        alert('Поздравляем! Квест пройден. Перекодировка по свойству настроена.');
+      });
+    })();
+
+    // Примитивный поповер (если добавим элементы с классом .popover)
+    document.querySelectorAll('.popover').forEach(pop=>{
+      pop.addEventListener('click',()=>{
+        const isOpen = pop.getAttribute('data-open') === 'true';
+        pop.setAttribute('data-open', String(!isOpen));
+      });
+    });
+  </script>
+</body>
+</html>
