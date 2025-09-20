@@ -84,16 +84,261 @@
     <section class="step" id="need">
       <h2>0) Что понадобится</h2>
       <ul>
-        <li>Excel-таблица с колонками <code>code</code>, <code>text</code>, <code>new</code>.</li>
-        <li>Доступ к репозиторию GitHub Pages.</li>
+        <li>Excel для создании таблицы .</li>
+        <li>Доступ к конструктору в Синтезе.</li>
         <li>Браузер с включённым JavaScript.</li>
       </ul>
+    </section>
 
-      <div class="shots shots-3">
+    <!-- 1) ТАБЛИЦА: слева текст, справа картинка -->
+    <section class="step" id="excel">
+      <h2>1) Подготовьте таблицу в Excel с колонками <code>code</code>, <code>text</code>, <code>new</code></h2>
+      <div class="split">
+        <div>
+          <ol>
+            <li>Создайте таблицу с тремя колонками: <code>code</code>, <code>text</code>, <code>new</code>. Названия <code>code</code>/<code>text</code> — системные.</li>
+            <li>Заполните минимум 10 строк:
+              <ul>
+                <li>в <code>code</code> — исходные коды (1, 2, 3…),</li>
+                <li>в <code>text</code> — подписи («тюльпан», «нарцисс», «яблоня»),</li>
+                <li>в <code>new</code> — целевые категории (1 = «цветы», 2 = «деревья»).</li>
+              </ul>
+            </li>
+          </ol>
+          <p><strong>Принцип:</strong> исходные варианты объединяются в группы (например, «тюльпан» и «нарцисс» → «цветы», «яблоня» → «деревья»).</p>
+
+          <p class="meta"><strong>Проверь себя:</strong></p>
+          <div class="block-checks" aria-label="Отметки блока 1">
+            <label><input class="progress-check" type="checkbox"> Файл Excel создан</label>
+            <label><input class="progress-check" type="checkbox"> 10 строк заполнены</label>
+            <label><input class="progress-check" type="checkbox"> Коды в колонке <code>new</code> указаны</label>
+          </div>
+        </div>
         <figure>
-          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Raw1.png" alt="Поле Raw — вкладка и поле ввода">
-          <figcaption>Поле Raw — вкладка и поле ввода</figcaption>
+          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/table.png" alt="Пример таблицы code / text / new">
+          <figcaption>Пример структуры таблицы</figcaption>
         </figure>
+      </div>
+    </section>
+
+    <!-- 2) RAW: БЕЗ картинок и БЕЗ чек-листа -->
+    <section class="step" id="raw">
+      <h2>2) Вставьте таблицу в окне Raw</h2>
+      <ol>
+        <li>Создайте новый вопрос <code>q1</code> (Single Choice).</li>
+        <li>Нажмите иконку <em>Raw</em>, вставьте таблицу, сохраните.</li>
+      </ol>
+    </section>
+
+    <!-- 3) КОНСТРУКТОР -->
+    <section class="step" id="constructor">
+      <h2>3) Вернитесь в режим конструктора</h2>
+      <p>Убедитесь, что строки считались. Атрибут <code>new</code> записан внутри вариантов ответов в <code>q1</code> (внешне список не меняется).</p>
+
+      <p class="meta"><strong>Проверь себя:</strong></p>
+      <div class="block-checks" aria-label="Отметки блока 3">
+        <label><input class="progress-check" type="checkbox"> Окно Raw закрыто</label>
+        <label><input class="progress-check" type="checkbox"> Изменения в <code>q1</code> сохранены</label>
+      </div>
+    </section>
+
+    <!-- 4) Q2: текст слева, картинка справа -->
+    <section class="step" id="q2">
+      <h2>4) Создайте второй вопрос Single Choice (q2) с вариантами из <code>new</code></h2>
+      <div class="split">
+        <div>
+          <ol>
+            <li>Добавьте новый вопрос Single Choice — <code>q2</code>.</li>
+            <li>Создайте варианты: 1 — «цветы», 2 — «деревья».</li>
+          </ol>
+
+          <p class="meta"><strong>Проверь себя:</strong></p>
+          <div class="block-checks" aria-label="Отметки блока 4">
+            <label><input class="progress-check" type="checkbox"> Вопрос <code>q2</code> создан</label>
+            <label><input class="progress-check" type="checkbox"> Варианты из <code>new</code> добавлены</label>
+          </div>
+        </div>
         <figure>
-          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/FilterAndPen.png" alt="Иконка фильтра и «карандаш»">
-          <figcaption>Иконка фильтра и «карандаш»</figcaption
+          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/q2.png" alt="Вопрос q2: 1 цветы, 2 деревья">
+          <figcaption>q2: целевые ответы</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- 5) RECODE: карточки текст→картинка, по две в ряд -->
+    <section class="step" id="recode">
+      <h2>5) Настройте фильтр <em>recode by attribute</em> для <code>q2</code></h2>
+
+      <div class="pair-grid">
+        <div class="stepcard">
+          <p>Нажмите <strong>Filter</strong>, чтобы активировать окно редактора логики.</p>
+          <figure>
+            <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Filter.png" alt="Иконка Filter">
+            <figcaption>Открываем панель логики (Filter)</figcaption>
+          </figure>
+        </div>
+
+        <div class="stepcard">
+          <p>Зайдите в панель с командами логики, нажав на «карандаш».</p>
+          <figure>
+            <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Edit.png" alt="Кнопка Edit (карандаш)">
+            <figcaption>Переход к редактированию правила (Edit)</figcaption>
+          </figure>
+        </div>
+
+        <div class="stepcard">
+          <p>Выберите правило <strong>Recode by attribute</strong>.</p>
+          <figure>
+            <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Recode2.png" alt="Выбор Recode by attribute">
+            <figcaption>Выбор правила</figcaption>
+          </figure>
+        </div>
+
+        <div class="stepcard">
+          <p>В поле <em>Select option</em> укажите вопрос <strong>q1</strong>. В <em>пустом окне</em> введите название атрибута для перекодировки — <strong>new</strong>.</p>
+          <figure>
+            <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Recode3.png" alt="Параметры: from q1, attribute new">
+            <figcaption>Параметры: from q1, attribute new</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <p class="meta"><strong>Проверь себя:</strong></p>
+      <div class="block-checks" aria-label="Отметки блока 5">
+        <label><input class="progress-check" type="checkbox"> Открыт Filter и Edit</label>
+        <label><input class="progress-check" type="checkbox"> Выбрано «Recode by attribute»</label>
+        <label><input class="progress-check" type="checkbox"> Указаны q1 и атрибут <code>new</code></label>
+      </div>
+    </section>
+
+    <!-- 6) СКРЫТЬ Q2 -->
+    <section class="step" id="hide-q2">
+      <h2>6) Скройте вопрос <code>q2</code> от респондентов</h2>
+      <ol>
+        <li>Проверьте корректность работы перекодировки.</li>
+        <li>На панели логики выберите <strong>ASK NEVER</strong> и сохраните.</li>
+      </ol>
+
+      <p class="meta"><strong>Проверь себя:</strong></p>
+      <div class="block-checks" aria-label="Отметки блока 6">
+        <label><input class="progress-check" type="checkbox"> Перекодировка работает корректно</label>
+        <label><input class="progress-check" type="checkbox"> <code>q2</code> скрыт (ASK NEVER)</label>
+      </div>
+    </section>
+
+    <!-- ИТОГ -->
+    <section class="step" id="checklist">
+      <h2>Итоговый чек-лист</h2>
+      <div class="meta">Отметьте всё — и кнопка завершения станет активной</div>
+      <div class="block-checks">
+        <label><input class="progress-check" type="checkbox"> Подготовлен Excel с колонками <code>code</code>, <code>text</code>, <code>new</code></label>
+        <label><input class="progress-check" type="checkbox"> Таблица вставлена в Raw и сохранена</label>
+        <label><input class="progress-check" type="checkbox"> Создан вопрос <code>q2</code> и добавлены коды из <code>new</code></label>
+        <label><input class="progress-check" type="checkbox"> Настроен <em>recode by attribute</em></label>
+        <label><input class="progress-check" type="checkbox"> <code>q2</code> скрыт (ASK NEVER), проверена работа</label>
+      </div>
+      <hr>
+      <a id="finish" class="btn" href="#top" aria-disabled="true">Квест пройден ✓</a>
+      <p class="subtitle">Кнопка активируется автоматически, когда все чекбоксы отмечены.</p>
+    </section>
+  </main>
+
+  <!-- Плавающий прогресс -->
+  <aside class="progress-dock" aria-live="polite" aria-label="Прогресс квеста">
+    <div class="head">
+      <strong>Прогресс квеста</strong>
+      <span class="muted" id="progress-label">0% выполнено</span>
+    </div>
+    <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+  </aside>
+
+  <script>
+  (function(){
+    const $ = (q, el=document)=>el.querySelector(q);
+    const $$ = (q, el=document)=>Array.from(el.querySelectorAll(q));
+
+    /* TOC */
+    function initTOC(){
+      const h2s = $$('main h2');
+      if (!h2s.length) return;
+      const toc = document.createElement('nav');
+      toc.className = 'toc';
+      toc.setAttribute('aria-label','Оглавление');
+      toc.innerHTML = '<h3>Оглавление</h3><div class="toc-links"></div>';
+      const wrap = $('.doc') || document.body;
+      wrap.prepend(toc);
+      const linksWrap = $('.toc-links', toc);
+      h2s.forEach(h=>{
+        const id = h.id || h.textContent.trim().toLowerCase().replace(/\s+/g,'-').replace(/[^\w\-]+/g,'');
+        h.id = id;
+        const a = document.createElement('a');
+        a.href = `#${id}`;
+        a.textContent = h.textContent.replace(/^\d+\)\s*/,'');
+        linksWrap.appendChild(a);
+      });
+      const obs = new IntersectionObserver((ents)=>{
+        ents.forEach(ent=>{
+          if(ent.isIntersecting){
+            const id = ent.target.id;
+            $$('.toc a').forEach(a=>a.classList.toggle('active', a.getAttribute('href') === '#'+id));
+          }
+        });
+      }, {rootMargin:'-40% 0px -55% 0px', threshold: 0.01});
+      h2s.forEach(h=>obs.observe(h));
+    }
+
+    /* ПРОГРЕСС */
+    const STORAGE_KEY = 'quest_step1_checks_all_v2';
+    const bar = $('#progress-bar');
+    const label = $('#progress-label');
+    const finish = $('#finish');
+
+    function getChecks(){ return $$('.progress-check'); }
+
+    function restore(){
+      try{
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        getChecks().forEach((c,i)=> c.checked = !!saved[i]);
+      }catch(e){}
+      update();
+    }
+
+    function save(){
+      const arr = getChecks().map(c=> c.checked ? 1 : 0);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+    }
+
+    function update(){
+      const checks = getChecks();
+      const done = checks.filter(c=>c.checked).length;
+      const total = checks.length || 1;
+      const pct = Math.round(done/total*100);
+      if (bar) bar.style.width = pct + '%';
+      if (label) label.textContent = pct + '% выполнено';
+      if (finish){
+        const allDone = done === total;
+        finish.setAttribute('aria-disabled', allDone ? 'false' : 'true');
+        finish.style.boxShadow = allDone ? '0 0 0 3px rgba(34,197,94,.25)' : '';
+      }
+    }
+
+    document.addEventListener('change', (e)=>{
+      if (e.target && e.target.matches('.progress-check')){
+        save(); update();
+      }
+    });
+
+    document.addEventListener('click', (e)=>{
+      const a = e.target.closest('a[href^="#"]'); if(!a) return;
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id); if(!el) return;
+      e.preventDefault();
+      el.scrollIntoView({behavior:'smooth', block:'start'});
+      history.replaceState(null, '', '#'+id);
+    });
+
+    window.addEventListener('DOMContentLoaded', ()=>{ initTOC(); restore(); });
+  })();
+  </script>
+</body>
+</html>
