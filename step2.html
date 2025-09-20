@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Квест «Перекодировка числовой переменной в категориальную» — Step 2</title>
+
+  <style>
+    /* Можно взять те же стили, что и в step1.html */
+    /* ... скопировать блок CSS полностью из step1 ... */
+
+    .btn.success {
+      background: var(--ok);
+      border-color: var(--ok);
+      color: #fff;
+      pointer-events: auto;
+    }
+    .btn.success:hover {
+      background: #15803d;
+      border-color: #15803d;
+    }
+  </style>
+</head>
+<body>
+  <a id="top"></a>
+
+  <header class="hero">
+    <div class="doc">
+      <h1 class="title">Квест «Перекодировка числовой переменной в категориальную»</h1>
+      <p class="subtitle">Step 2 · Пошаговый гайд</p>
+      <div id="toc-anchor"></div>
+    </div>
+  </header>
+
+  <main class="doc">
+    <!-- Шаг 1 -->
+    <section class="step" id="q3">
+      <h2>1) Создайте вопрос <code>q3</code> (Numeric)</h2>
+      <p>Добавьте вопрос с типом <strong>Numeric</strong>, чтобы респондент мог вводить возраст.</p>
+      <p class="meta"><strong>Пример:</strong> q3 = «Укажите ваш возраст (полных лет)»</p>
+      <p class="meta"><strong>Проверь себя:</strong></p>
+      <div class="block-checks">
+        <label><input type="checkbox" class="progress-check"> Вопрос <code>q3</code> создан</label>
+      </div>
+    </section>
+
+    <!-- Шаг 2 -->
+    <section class="step" id="q4">
+      <h2>2) Создайте вопрос <code>q4</code> (Single Choice) с категориями</h2>
+      <p>Добавьте категории, в которые будет перекодироваться возраст.</p>
+      <ul>
+        <li>1 = «до 17 лет»</li>
+        <li>2 = «18–29 лет»</li>
+        <li>3 = «30–44 года»</li>
+        <li>4 = «45+»</li>
+      </ul>
+      <p class="meta"><strong>Проверь себя:</strong></p>
+      <div class="block-checks">
+        <label><input type="checkbox" class="progress-check"> Вопрос <code>q4</code> создан</label>
+        <label><input type="checkbox" class="progress-check"> Категории добавлены</label>
+      </div>
+    </section>
+
+    <!-- Шаг 3 -->
+    <section class="step" id="attributes">
+      <h2>3) Нажмите иконку <em>Атрибуты</em></h2>
+      <p>В новом окне нажмите два раза на <strong>+</strong>, чтобы добавить две новые колонки.</p>
+      <p class="meta"><strong>Проверь себя:</strong></p>
+      <div class="block-checks">
+        <label><input type="checkbox" class="progress-check"> Две новые колонки добавлены</label>
+      </div>
+    </section>
+
+    <!-- Шаг 4 -->
+    <section class="step" id="min-max">
+      <h2>4) В названиях колонок укажите <code>min</code> и <code>max</code></h2>
+      <p>Это будут границы диапазонов для каждой категории.</p>
+      <p class="meta"><strong>Проверь себя:</strong></p>
+      <div class="block-checks">
+        <label><input type="checkbox" class="progress-check"> Колонки названы <code>min</code> и <code>max</code></label>
+      </div>
+    </section>
+
+    <!-- Шаг 5 -->
+    <section class="step" id="ranges">
+      <h2>5) Задайте числовые границы для категорий</h2>
+      <p>В колонках <code>min</code> и <code>max</code> укажите границы для каждой категории.</p>
+      <table border="1" cellpadding="6" style="border-collapse:collapse;text-align:center;margin:12px auto;">
+        <thead>
+          <tr><th>Категория (q4)</th><th>min</th><th>max</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1 = «до 17 лет»</td><td>0</td><td>17</td></tr>
+          <tr><td>2 = «18–29 лет»</td><td>18</td><td>29</td></tr>
+          <tr><td>3 = «30–44 года»</td><td>30</td><td>44</td></tr>
+          <tr><td>4 = «45+»</td><td>45</td><td>120</td></tr>
+        </tbody>
+      </table>
+      <p class="meta"><strong>Проверь себя:</strong></p>
+      <div class="block-checks">
+        <label><input type="checkbox" class="progress-check"> Границы min/max указаны</label>
+      </div>
+    </section>
+
+    <!-- Итог -->
+    <section class="step" id="checklist">
+      <h2>Итоговый чек-лист</h2>
+      <div class="block-checks">
+        <label><input type="checkbox" class="progress-check"> Вопрос <code>q3</code> создан</label>
+        <label><input type="checkbox" class="progress-check"> Вопрос <code>q4</code> с категориями создан</label>
+        <label><input type="checkbox" class="progress-check"> Колонки <code>min</code>/<code>max</code> добавлены</label>
+        <label><input type="checkbox" class="progress-check"> Границы чисел заданы</label>
+      </div>
+      <hr>
+      <a id="finish-btn" class="btn" href="#top" aria-disabled="true">Квест пройден</a>
+    </section>
+  </main>
+
+  <!-- Плавающий прогресс -->
+  <aside class="progress-dock" aria-live="polite" aria-label="Прогресс квеста">
+    <div class="head">
+      <strong>Прогресс квеста</strong>
+      <span class="muted" id="progress-label">0% выполнено</span>
+    </div>
+    <div class="progress"><span id="progress-bar"></span></div>
+  </aside>
+
+  <script>
+  (function(){
+    const $ = (q, el=document)=>el.querySelector(q);
+    const $$ = (q, el=document)=>Array.from(el.querySelectorAll(q));
+    const STORAGE_KEY = 'quest_step2_checks';
+
+    const bar = $('#progress-bar');
+    const label = $('#progress-label');
+    const finish = $('#finish-btn');
+
+    function getChecks(){ return $$('.progress-check'); }
+
+    function restore(){
+      try{
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        getChecks().forEach((c,i)=> c.checked = !!saved[i]);
+      }catch(e){}
+      update();
+    }
+
+    function save(){
+      const arr = getChecks().map(c=> c.checked ? 1 : 0);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+    }
+
+    function update(){
+      const checks = getChecks();
+      const done = checks.filter(c=>c.checked).length;
+      const total = checks.length || 1;
+      const pct = Math.round(done/total*100);
+      if (bar) bar.style.width = pct + '%';
+      if (label) label.textContent = pct + '% выполнено';
+      if (finish){
+        const allDone = done === total;
+        finish.setAttribute('aria-disabled', allDone ? 'false' : 'true');
+        finish.classList.toggle('success', allDone);
+      }
+    }
+
+    document.addEventListener('change', (e)=>{
+      if (e.target.matches('.progress-check')){ save(); update(); }
+    });
+
+    window.addEventListener('DOMContentLoaded', restore);
+  })();
+  </script>
+</body>
+</html>
