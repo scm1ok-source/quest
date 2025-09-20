@@ -83,10 +83,16 @@
  /* фиксированный док */
 #progress-dock.fixed{
   position: fixed;
-  top: calc(var(--nav-h) + var(--dock-gap));
-  right: 16px;
+  top: 8px;              /* или calc(var(--nav-h)+var(--dock-gap)) */
+  right: 16px;           /* можно прижать к центру/левому краю при желании */
   width: min(420px, 92vw);
   max-width: 100%;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(6px);
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(2,6,23,.08);
+}
+
 }
 
   </style>
@@ -94,16 +100,19 @@
 <body>
   <div class="container">
     <header>
-      <span class="badge">Квест «Перекодировка через атрибуты»</span>
-      <h1>Пошаговый гайд для первого прохождения</h1>
-      <p>Цель: научиться использовать перекодировку переменных с помощью атрибутов <span class="kbd">recode by attribute</span> в онлайн‑конструкторе анкет.</p>
-      <div class="card" id="progress-dock" class="fixed">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
-          <strong>Прогресс квеста</strong>
-          <span class="muted" id="progress-label">0% выполнено</span>
-        </div>
-        <div class="progress" aria-label="Прогресс"><span id="progress-bar"></span></div>
-      </div>
+     <!-- Плавающая (fixed) карточка прогресса — вставьте сразу после </header> -->
+<div id="progress-dock" class="card fixed" role="status" aria-live="polite">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px">
+    <strong>Прогресс квеста</strong>
+    <span class="muted" id="progress-label">0% выполнено</span>
+  </div>
+  <div class="progress" aria-label="Прогресс">
+    <span id="progress-bar" style="width:0%"></span>
+  </div>
+</div>
+
+<!-- Спейсер, чтобы основной контент не «подскакивал» под фикс-блоком -->
+<div aria-hidden="true" style="height:92px"></div>
     </header>
 
 
@@ -396,6 +405,7 @@
   </script>
 </body>
 </html>
+
 
 
 
