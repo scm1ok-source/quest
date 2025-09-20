@@ -80,12 +80,37 @@
   width: auto; height: auto; object-fit: contain; display: block;
 }
 
+    /* Высота липкой навигации (если у вас есть nav.quick с top:0) */
+:root{
+  --nav-h: 48px;   /* подстройте под фактическую высоту навигации */
+  --dock-gap: 8px; /* зазор под прогресс-картой */
+}
+
+/* Липкая карточка прогресса */
+#progress-dock{
+  position: sticky;
+  top: calc(var(--nav-h) + var(--dock-gap));
+  z-index: 50; /* выше контента, но ниже выпадающих меню, если есть */
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(6px);
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(2,6,23,.08);
+}
+
+/* Чтобы карточка не «прыгала» в сетке при разных ширинах */
+#progress-dock .progress{ height: 8px; }
+
+/* Мобильная подстройка (если верхнее меню выше) */
+@media (max-width: 640px){
+  :root{ --nav-h: 56px; }
+}
+
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <span class="badge">Квест «Перекодировка через свойства»</span>
+      <span class="badge">Квест «Перекодировка через атрибуты»</span>
       <h1>Пошаговый гайд для первого прохождения</h1>
       <p>Цель: научиться использовать перекодировку переменных с помощью атрибутов <span class="kbd">recode by attribute</span> в онлайн‑конструкторе анкет.</p>
       <div class="card" style="margin-top:8px">
@@ -96,6 +121,7 @@
         <div class="progress" aria-label="Прогресс"><span id="progress-bar"></span></div>
       </div>
     </header>
+
 
     <!-- Функции конструктора, которые понадобятся -->
 <section class="card">
@@ -386,6 +412,7 @@
   </script>
 </body>
 </html>
+
 
 
 
