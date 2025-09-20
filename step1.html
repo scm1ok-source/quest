@@ -332,32 +332,47 @@ box-shadow: 0 8px 24px rgba(2,6,23,.08);
         <figcaption>recode2</figcaption>
       </figure></div>
         <ol>
-        <li>Сохраните правило. Сделайте апдейт ссылки и проверьте корректность работы для перекодировки.</li>
+        <li>Сохраните правило. </li>
          </ol>
         <div class="checklist" data-step="5">
-          <label><input type="checkbox"> Открыта панель фильтров у Q2</label>
-          <label><input type="checkbox"> Выбрано «recode by attribute» и открыт редактор</label>
-          <label><input type="checkbox"> Указаны Source=Q1 и Property=NewShine</label>
+          <label><input type="checkbox"> Активна иконка фильтров у q2</label>
+          <label><input type="checkbox"> Выбрано «recode by attribute» </label>
+          <label><input type="checkbox"> Указаны правила Select Option=Q1 и атрибут new</label>
         </div>
       </div>
     </section>
 
+   <!-- Шаг 6 -->
+    <section class="card" id="step5">
+      <h2>5) Скройте вопрос q2 от респондентов </h2>
+      <div class="step">
+        <ol>
+          <li>Сделайте апдейт ссылки и проверьте корректность работы перекодировки. </li>
+          <li> На панели c командами логики выберите <strong>ASK NEVER</strong>.</li>
+            <li>Сохраните изменения.</li>
+        </ol>
+               <div class="checklist" data-step="5">
+          <label><input type="checkbox"> Перекодировка корректно работает </label>
+          <label><input type="checkbox"> q2 скрыт от респондентов </label>
+         </div>
+      </div>
+    </section>
     <!-- Частые ошибки -->
     <section class="card" id="mistakes">
       <h2>Частые ошибки и быстрые решения</h2>
       <div class="grid two">
-        <div class="step"><strong>Неверный разделитель</strong><br><span class="muted">Ожидается «;». Если вставили запятые — замените на «;».</span></div>
-        <div class="step"><strong>Опечатка в названии свойства</strong><br><span class="muted">«NewShine» должно совпадать до символа.</span></div>
-        <div class="step"><strong>Нет вариантов A/B/C в Q2</strong><br><span class="muted">Добавьте их вручную перед настройкой recode.</span></div>
-        <div class="step"><strong>Источник не тот</strong><br><span class="muted">В Source должен быть выбран именно Q1.</span></div>
+               <div class="step"><strong>Источник не тот</strong><br><span class="muted">В Select Option должен быть выбран именно q1.</span></div>
+        <div class="step"><strong>Опечатка в названии свойства</strong><br><span class="muted">«New» должно совпадать до символа и регистра.</span></div>
+        <div class="step"><strong>Нет вариантов ответов из атрибута new (1/2)  в q2</strong><br><span class="muted">Добавьте их вручную перед настройкой recode.</span></div>
+          <div class="step"><strong>Не все коды из атрубита new указаны в q2</strong><br><span class="muted">Если в колонке new использовали коды 1, 2, 3, 4, 5,  то все 5 значений должны быть прописаны в q2.</span></div>
       </div>
     </section>
 
     <!-- Итог -->
     <section class="card" id="finish">
       <h2>Итог и совет</h2>
-      <p><strong>Резюме:</strong> вы научились сжимать длинные списки в аккуратный A/B/C‑вопрос через свойство и «recode by attribute». Храните маппинги в колонках‑свойствах — это ускоряет отчётность и снижает ошибки.</p>
-      <p class="muted">Совет: версионируйте свойства, например <span class="kbd">NewShine_v1</span>, <span class="kbd">NewShine_v2</span>, и храните Excel‑историю изменений.</p>
+      <p><strong>Резюме:</strong> вы научились записывать в переменную ответы через команду «recode by attribute». </p>
+      <p class="muted">Совет: такой подход используется для работы с географией: город - страта - федеральный округ. Как правиль новые переменные, которые получают при перекодировке скрыты от респондентов. </p>
 
       <div class="cta">
         <div style="display:flex;align-items:center;gap:12px">
@@ -411,6 +426,7 @@ box-shadow: 0 8px 24px rgba(2,6,23,.08);
   </script>
 </body>
 </html>
+
 
 
 
