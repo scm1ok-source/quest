@@ -80,29 +80,13 @@
   width: auto; height: auto; object-fit: contain; display: block;
 }
 
-    /* Высота липкой навигации (если у вас есть nav.quick с top:0) */
-:root{
-  --nav-h: 48px;   /* подстройте под фактическую высоту навигации */
-  --dock-gap: 8px; /* зазор под прогресс-картой */
-}
-
-/* Липкая карточка прогресса */
-#progress-dock{
-  position: sticky;
+ /* фиксированный док */
+#progress-dock.fixed{
+  position: fixed;
   top: calc(var(--nav-h) + var(--dock-gap));
-  z-index: 50; /* выше контента, но ниже выпадающих меню, если есть */
-  background: rgba(255,255,255,0.97);
-  backdrop-filter: blur(6px);
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 8px 24px rgba(2,6,23,.08);
-}
-
-/* Чтобы карточка не «прыгала» в сетке при разных ширинах */
-#progress-dock .progress{ height: 8px; }
-
-/* Мобильная подстройка (если верхнее меню выше) */
-@media (max-width: 640px){
-  :root{ --nav-h: 56px; }
+  right: 16px;
+  width: min(420px, 92vw);
+  max-width: 100%;
 }
 
   </style>
@@ -113,7 +97,7 @@
       <span class="badge">Квест «Перекодировка через атрибуты»</span>
       <h1>Пошаговый гайд для первого прохождения</h1>
       <p>Цель: научиться использовать перекодировку переменных с помощью атрибутов <span class="kbd">recode by attribute</span> в онлайн‑конструкторе анкет.</p>
-      <div class="card" style="margin-top:8px">
+      <div class="card" id="progress-dock" class="fixed">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
           <strong>Прогресс квеста</strong>
           <span class="muted" id="progress-label">0% выполнено</span>
@@ -412,6 +396,7 @@
   </script>
 </body>
 </html>
+
 
 
 
