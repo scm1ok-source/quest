@@ -266,8 +266,13 @@
       toc.className = 'toc';
       toc.setAttribute('aria-label','Оглавление');
       toc.innerHTML = '<h3>Оглавление</h3><div class="toc-links"></div>';
-      const wrap = $('.doc') || document.body;
-      wrap.prepend(toc);
+     const anchor = document.getElementById('toc-anchor');
+if (anchor) {
+  anchor.appendChild(toc);
+} else {
+  const wrap = $('.doc') || document.body;
+  wrap.prepend(toc);
+}
       const linksWrap = $('.toc-links', toc);
       h2s.forEach(h=>{
         const id = h.id || h.textContent.trim().toLowerCase().replace(/\s+/g,'-').replace(/[^\w\-]+/g,'');
@@ -343,4 +348,5 @@
   </script>
 </body>
 </html>
+
 
