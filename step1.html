@@ -269,6 +269,24 @@
     </section>
 
     <!-- ИТОГ -->
+     <!-- Частые ошибки -->
+    <section class="card" id="mistakes">
+      <h2>Частые ошибки и быстрые решения</h2>
+      <div class="grid two">
+               <div class="step"><strong>Источник не тот</strong><br><span class="muted">В Select Option должен быть выбран именно q1.</span></div>
+        <div class="step"><strong>Опечатка в названии свойства</strong><br><span class="muted">«New» должно совпадать до символа и регистра.</span></div>
+        <div class="step"><strong>Нет вариантов ответов из атрибута new (1/2)  в q2</strong><br><span class="muted">Добавьте их вручную перед настройкой recode.</span></div>
+          <div class="step"><strong>Не все коды из атрубита new указаны в q2</strong><br><span class="muted">Если в колонке new использовали коды 1, 2, 3, 4, 5,  то все 5 значений должны быть прописаны в q2.</span></div>
+      </div>
+    </section>
+
+    <!-- Итог -->
+    <section class="card" id="finish">
+      <h2>Итог и совет</h2>
+      <p><strong>Резюме:</strong> вы научились записывать в переменную ответы через команду «recode by attribute». </p>
+      <p class="muted">Совет: такой подход используется для работы с географией: город - страта - федеральный округ. Как правиль новые переменные, которые получают при перекодировке скрыты от респондентов. </p>
+  </section>
+
     <section class="step" id="checklist">
       <h2>Итоговый чек-лист</h2>
       <div class="block-checks">
@@ -387,6 +405,7 @@ if (anchor) {
   </script>
 </body>
 </html>
+
 
 
 
