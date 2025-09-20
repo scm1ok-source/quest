@@ -65,6 +65,11 @@
     hr{border:none; border-top:1px solid var(--line); margin:24px 0} ul,ol{padding-left:24px}
 
     @media (max-width: 720px){ .doc{margin-bottom:170px} .toc{position:static} }
+    /* Три изображения в один ряд для блока 0 */
+.shots-3{ grid-template-columns: repeat(3, minmax(0,1fr)); }
+@media (max-width: 980px){ .shots-3{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+@media (max-width: 640px){ .shots-3{ grid-template-columns: 1fr; } }
+
   </style>
 </head>
 <body>
@@ -73,7 +78,7 @@
   <header class="hero">
     <div class="doc">
       <h1 class="title">Квест «Перекодировка через атрибуты»</h1>
-      <p class="subtitle">Step 1 · Пошаговый гайд для Recode by attribute</p>
+      <p class="subtitle">Пошаговый гайд для Recode by attribute</p>
     </div>
   </header>
 
@@ -81,43 +86,16 @@
     <!-- TOC генерируется скриптом по h2 -->
 
     <!-- 0) ЧТО ПОНАДОБИТСЯ — исходные тексты и изображения -->
-    <section class="step" id="need">
-      <h2>0) Что понадобится</h2>
+   <section class="step" id="need">
+  <h2>0) Что понадобится</h2>
+  <ul>
+    <li>Excel-таблица с колонками <code>code</code>, <code>text</code>, <code>new</code>.</li>
+    <li>Доступ к конструктору на Синтезе.</li>
+    <li>Браузер с включённым JavaScript.</li>
+  </ul>
 
-      <h3>Поле Raw режим для списков</h3>
-      <p>Это способ вставить весь список ответов разом через стандартный Copy/Paste.</p>
-      <div class="shots">
-        <figure>
-          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Raw1.png" alt="Поле Raw — вкладка и поле ввода">
-          <figcaption>Поле Raw — вкладка и поле ввода</figcaption>
-        </figure>
-      </div>
+</section>
 
-      <h3>Иконка фильтра и «карандаш»</h3>
-      <p>Доступ к возможностям перекодировки и задания различных фильтров.</p>
-      <div class="shots">
-        <figure>
-          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/FilterAndPen.png" alt="Иконка фильтра и кнопка редактирования (карандаш)">
-          <figcaption>Иконка фильтра и кнопка редактирования</figcaption>
-        </figure>
-      </div>
-
-      <h3>Правило recode by attribute</h3>
-      <p>Перекодировка по значению атрибута у исходных ответов.</p>
-      <div class="shots">
-        <figure>
-          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Recode.png" alt="Настройка правила Recode by attribute">
-          <figcaption>Настройка правила Recode by attribute</figcaption>
-        </figure>
-      </div>
-
-      <!-- чекбоксы блока -->
-      <div class="block-checks" aria-label="Отметки блока 0">
-        <label><input type="checkbox"> Понимаю, где включать режим Raw</label>
-        <label><input type="checkbox"> Нашёл(ла) иконки Filter и Edit</label>
-        <label><input type="checkbox"> Понимаю, что делает «Recode by attribute»</label>
-      </div>
-    </section>
 
     <!-- 1) ТАБЛИЦА -->
     <section class="step" id="excel">
@@ -283,3 +261,4 @@
     <div class="head">
       <strong>Прогресс квеста</strong>
       <span class="mute
+
