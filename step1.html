@@ -267,24 +267,22 @@ box-shadow: 0 8px 24px rgba(2,6,23,.08);
 
     <!-- Шаг 4 -->
     <section class="card" id="step4">
-      <h2>4) Создайте второй вопрос Single Choice (Q2) с вариантами A/B/C</h2>
+      <h2>4) Создайте второй вопрос Single Choice (q2) с вариантами ответов из <strong>new</strong>strong> </h2>
       <div class="step">
         <ol>
-          <li>Добавьте новый вопрос <strong>Single Choice</strong> — <strong>Q2</strong>.</li>
-          <li>Создайте варианты ответа: <strong>A</strong>, <strong>B</strong>, <strong>C</strong>.</li>
+          <li>Добавьте новый вопрос <strong>Single Choice</strong> — <strong>q2</strong>.</li>
+          <li>Создайте варианты ответа: <strong>1 - цветы</strong>, <strong>2 - деревья</strong>.</li>
         </ol>
-        <div class="fig">[СКРИНШОТ_5: Создание нового вопроса Q2 типа Single Choice]</div>
-        <div class="fig">[СКРИНШОТ_6: Экран редактирования Q2 с тремя вариантами A/B/C]</div>
-        <div class="need">
-          📸 <strong>Нужны картинки:</strong>
-          <ul>
-            <li>Форма добавления нового вопроса (тип Single Choice).</li>
-            <li>Заполненный список вариантов A/B/C в Q2.</li>
-          </ul>
+      <div class="fig"><figure>
+        <div class="media">
+          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/q2.png"
+               alt="q2" loading="lazy">
         </div>
+        <figcaption>q2</figcaption>
+      </figure></div>
         <div class="checklist" data-step="4">
           <label><input type="checkbox"> Создан вопрос Q2 типа Single Choice</label>
-          <label><input type="checkbox"> Добавлены варианты A/B/C</label>
+          <label><input type="checkbox"> Добавлены варианты ответа с кодами как у атрибута new</label>
         </div>
       </div>
     </section>
@@ -295,10 +293,12 @@ box-shadow: 0 8px 24px rgba(2,6,23,.08);
       <div class="step">
         <ol>
           <li>Откройте панель логики/фильтров у Q2 и нажмите иконку фильтра.</li>
+         </ol>
+        <div class="fig">[СКРИНШОТ_7: Выбор «recode by attribute»]</div>
           <li>Выберите правило <strong>Recode → recode by attribute</strong> и нажмите «карандаш» для редактирования.</li>
           <li>В поле <em>Source question</em> укажите <strong>Q1</strong>. В <em>Property name</em> введите <strong>NewShine</strong>.</li>
           <li>Сохраните правило. В предпросмотре проверьте соответствия: выбор в Q1 → A/B/C в Q2.</li>
-        </ol>
+     
         <div class="fig">[СКРИНШОТ_7: Выбор «recode by attribute»]</div>
         <div class="fig">[СКРИНШОТ_8: Форма с полями Source=Q1 и Property=NewShine]</div>
         <div class="fig">[СКРИНШОТ_9: Предпросмотр — выбран вариант Q1, подсветился A/B/C в Q2]</div>
@@ -407,6 +407,7 @@ box-shadow: 0 8px 24px rgba(2,6,23,.08);
   </script>
 </body>
 </html>
+
 
 
 
