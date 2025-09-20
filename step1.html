@@ -17,6 +17,9 @@
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
     img{display:block; max-width:100%; height:auto; object-fit:contain; border-radius:12px; margin-inline:auto}
+    a{color:#1d4ed8} code,kbd{background:#f1f5f9; border:1px solid var(--line); padding:2px 6px; border-radius:8px}
+    hr{border:none; border-top:1px solid var(--line); margin:24px 0} ul,ol{padding-left:24px}
+
     .doc{max-width:var(--w); margin:32px auto 120px; padding:0 22px}
     .hero{background: radial-gradient(1200px 500px at 50% -160px, rgba(37,99,235,.08), transparent 60%); padding:22px 0 10px; margin-bottom:8px}
     .title{font-size: clamp(30px, 4.8vw, 44px); font-weight:800; margin:0 0 6px}
@@ -30,231 +33,161 @@
     .toc a:hover{background:rgba(37,99,235,.06); border-color:rgba(37,99,235,.2)}
     .toc a.active{background:rgba(37,99,235,.1); border-color:rgba(37,99,235,.35)}
 
+    /* Карточки */
     .step{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:22px 18px; margin:18px 0; box-shadow:var(--shadow)}
     .step h2{margin:0 0 12px; font-size: clamp(22px, 2.8vw, 28px)}
     .step .meta{color:var(--muted); font-size:14px; margin-bottom:10px}
+
+    /* Сетки изображений */
     .shots{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; margin:12px 0}
+    .shots-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .shots-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .centered{justify-items:center; align-items:start}
+    @media (max-width: 980px){ .shots-3{grid-template-columns:repeat(2,minmax(0,1fr))} }
+    @media (max-width: 640px){ .shots-3,.shots-2{grid-template-columns:1fr} }
     figure{margin:0}
     figcaption{color:var(--muted); font-size:13px; margin-top:8px; text-align:center}
 
-    .callout{border-left:5px solid var(--brand); background:rgba(37,99,235,.08); padding:12px 14px; border-radius:12px; margin:14px 0; font-size:17px}
-    .callout.warn{border-left-color:var(--warn); background:rgba(217,119,6,.08)}
-    .callout.ok{border-left-color:var(--ok); background:rgba(22,163,74,.08)}
+    /* Разметка 1:1 (текст слева, картинка справа) */
+    .split{
+      display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start;
+    }
+    @media (max-width: 900px){ .split{grid-template-columns:1fr} }
 
-    /* чекбоксы в КАЖДОМ блоке */
+    /* Чекбоксы в блоках */
     .block-checks{display:grid; gap:10px; margin:12px 0}
     .block-checks label{display:flex; gap:12px; align-items:flex-start; background:#f8fafc; border:1px solid var(--line); padding:10px 12px; border-radius:12px; font-size:17px}
     .block-checks input{transform:translateY(2px)}
 
-    /* общий прогресс */
+    /* Прогресс */
     .progress{width:100%; height:12px; border-radius:999px; background:#f1f5f9; border:1px solid var(--line); overflow:hidden}
     .progress>span{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--brand),var(--brand-2)); transition:width .35s ease}
-
     .progress-dock{position:fixed; right:16px; bottom:16px; z-index:999; width:min(420px,92vw);
       background:#ffffffee; border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow); padding:14px 16px; backdrop-filter:blur(6px)}
     .progress-dock .head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px}
     .progress-dock .muted{color:var(--muted); font-size:14px}
 
+    /* Кнопки */
     .btn{display:inline-flex; align-items:center; gap:10px; padding:12px 16px; border-radius:14px;
       border:1px solid rgba(37,99,235,.35); background:rgba(37,99,235,.08); color:var(--text);
       text-decoration:none; font-weight:700; transition:transform .08s ease, background .2s ease, border-color .2s ease; font-size:17px}
     .btn:hover{transform:translateY(-1px); background:rgba(37,99,235,.12); border-color:rgba(37,99,235,.55)}
-    .btn:disabled{opacity:.6; cursor:not-allowed}
-
-    a{color:#1d4ed8} code,kbd{background:#f1f5f9; border:1px solid var(--line); padding:2px 6px; border-radius:8px}
-    hr{border:none; border-top:1px solid var(--line); margin:24px 0} ul,ol{padding-left:24px}
-
-    @media (max-width: 720px){ .doc{margin-bottom:170px} .toc{position:static} }
-    /* Три изображения в один ряд для блока 0 */
-.shots-3{ grid-template-columns: repeat(3, minmax(0,1fr)); }
-@media (max-width: 980px){ .shots-3{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
-@media (max-width: 640px){ .shots-3{ grid-template-columns: 1fr; } }
-
+    .btn[aria-disabled="true"]{opacity:.6; pointer-events:none}
   </style>
 </head>
-  <script>
-(function(){
-  const $ = (q, el=document)=>el.querySelector(q);
-  const $$ = (q, el=document)=>Array.from(el.querySelectorAll(q));
-
-  /* ---------- TOC из h2 ---------- */
-  const h2s = $$('main h2');
-  if (h2s.length){
-    const toc = document.createElement('nav');
-    toc.className = 'toc';
-    toc.setAttribute('aria-label','Оглавление');
-    toc.innerHTML = '<h3>Оглавление</h3><div class="toc-links"></div>';
-    const wrap = $('.doc') || document.body;
-    wrap.prepend(toc);
-    const linksWrap = $('.toc-links', toc);
-    h2s.forEach(h=>{
-      const id = h.id || h.textContent.trim().toLowerCase().replace(/\s+/g,'-').replace(/[^\w\-]+/g,'');
-      h.id = id;
-      const a = document.createElement('a');
-      a.href = `#${id}`;
-      a.textContent = h.textContent.replace(/^\d+\)\s*/,'');
-      linksWrap.appendChild(a);
-    });
-    const obs = new IntersectionObserver((ents)=>{
-      ents.forEach(ent=>{
-        if(ent.isIntersecting){
-          const id = ent.target.id;
-          $$('.toc a').forEach(a=>a.classList.toggle('active', a.getAttribute('href') === '#'+id));
-        }
-      });
-    }, {rootMargin:'-40% 0px -55% 0px', threshold: 0.01});
-    h2s.forEach(h=>obs.observe(h));
-  }
-
-  /* ---------- Прогресс по ВСЕМ чекбоксам ---------- */
-  const storageKey = 'quest_step1_checks_all';
-  const bar = $('#progress-bar');
-  const label = $('#progress-label');
-
-  function getChecks(){ return $$('input[type="checkbox"]'); }
-
-  function restore(){
-    try{
-      const saved = JSON.parse(localStorage.getItem(storageKey) || '[]');
-      getChecks().forEach((c,i)=> c.checked = !!saved[i]);
-    }catch(e){}
-    update();
-  }
-
-  function save(){
-    const arr = getChecks().map(c=> c.checked ? 1 : 0);
-    localStorage.setItem(storageKey, JSON.stringify(arr));
-  }
-
-  function update(){
-    const checks = getChecks();
-    const done = checks.filter(c=>c.checked).length;
-    const total = checks.length || 1;
-    const pct = Math.round(done/total*100);
-    if (bar) bar.style.width = pct + '%';
-    if (label) label.textContent = pct + '% выполнено';
-    const finish = $('#finish');
-    if (finish) finish.disabled = pct < 100;
-  }
-
-  // Делегирование: ловим любое изменение чекбокса на странице
-  document.addEventListener('change', (e)=>{
-    if (e.target && e.target.matches('input[type="checkbox"]')){
-      save(); update();
-    }
-  });
-
-  // Плавная прокрутка якорей
-  document.addEventListener('click', (e)=>{
-    const a = e.target.closest('a[href^="#"]'); if(!a) return;
-    const id = a.getAttribute('href').slice(1);
-    const el = document.getElementById(id); if(!el) return;
-    e.preventDefault();
-    el.scrollIntoView({behavior:'smooth', block:'start'});
-    history.replaceState(null, '', '#'+id);
-  });
-
-  // Восстановление после загрузки
-  window.addEventListener('load', restore);
-})();
-</script>
-
 <body>
   <a id="top"></a>
 
   <header class="hero">
     <div class="doc">
       <h1 class="title">Квест «Перекодировка через атрибуты»</h1>
-      <p class="subtitle">Пошаговый гайд для Recode by attribute</p>
+      <p class="subtitle">Step 1 · Пошаговый гайд для Recode by attribute</p>
     </div>
   </header>
 
   <main class="doc">
     <!-- TOC генерируется скриптом по h2 -->
 
-    <!-- 0) ЧТО ПОНАДОБИТСЯ — исходные тексты и изображения -->
-   <section class="step" id="need">
-  <h2>0) Что понадобится</h2>
-  <ul>
-    <li>Excel-таблица с колонками <code>code</code>, <code>text</code>, <code>new</code>.</li>
-    <li>Доступ к конструктору на Синтезе.</li>
-    <li>Браузер с включённым JavaScript.</li>
-  </ul>
+    <!-- 0) ЧТО ПОНАДОБИТСЯ -->
+    <section class="step" id="need">
+      <h2>0) Что понадобится</h2>
+      <ul>
+        <li>Excel-таблица с колонками <code>code</code>, <code>text</code>, <code>new</code>.</li>
+        <li>Доступ к репозиторию GitHub Pages.</li>
+        <li>Браузер с включённым JavaScript.</li>
+      </ul>
 
-</section>
+      <!-- три изображения в ряд -->
+      <div class="shots shots-3">
+        <figure>
+          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Raw1.png" alt="Поле Raw — вкладка и поле ввода">
+          <figcaption>Поле Raw — вкладка и поле ввода</figcaption>
+        </figure>
+        <figure>
+          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/FilterAndPen.png" alt="Иконка фильтра и «карандаш»">
+          <figcaption>Иконка фильтра и «карандаш»</figcaption>
+        </figure>
+        <figure>
+          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Recode.png" alt="Правило Recode by attribute">
+          <figcaption>Правило «Recode by attribute»</figcaption>
+        </figure>
+      </div>
 
+      <div class="block-checks" aria-label="Отметки блока 0">
+        <label><input class="progress-check" type="checkbox"> Понимаю, где включать режим Raw</label>
+        <label><input class="progress-check" type="checkbox"> Нашёл(ла) иконки Filter и Edit</label>
+        <label><input class="progress-check" type="checkbox"> Понимаю, что делает «Recode by attribute»</label>
+      </div>
+    </section>
 
-    <!-- 1) ТАБЛИЦА -->
+    <!-- 1) ТАБЛИЦА: слева текст, справа картинка -->
     <section class="step" id="excel">
       <h2>1) Подготовьте таблицу в Excel с колонками <code>code</code>, <code>text</code>, <code>new</code></h2>
-      <ol>
-        <li>Создайте таблицу в Excel с тремя колонками: <code>code</code>, <code>text</code>, <code>new</code>. Чтобы конструктор распознал структуру, сохраняйте названия «code» и «text». Новые атрибуты называйте латиницей.</li>
-        <li>Заполните 10 строк:
-          <ul>
-            <li>в <code>code</code> — исходные коды (1, 2, 3…),</li>
-            <li>в <code>text</code> — подписи («тюльпан», «нарцисс», «яблоня»),</li>
-            <li>в <code>new</code> — целевые категории (1 = «цветы», 2 = «деревья»).</li>
-          </ul>
-        </li>
-      </ol>
-      <p><strong>Принцип работы:</strong> исходные варианты объединяются в более крупные группы (например, «тюльпан» и «нарцисс» → «цветы», «яблоня» → «деревья»).</p>
-      <div class="shots">
+      <div class="split">
+        <div>
+          <ol>
+            <li>Создайте таблицу с тремя колонками: <code>code</code>, <code>text</code>, <code>new</code>. Названия <code>code</code>/<code>text</code> — системные.</li>
+            <li>Заполните минимум 10 строк:
+              <ul>
+                <li>в <code>code</code> — исходные коды (1, 2, 3…),</li>
+                <li>в <code>text</code> — подписи («тюльпан», «нарцисс», «яблоня»),</li>
+                <li>в <code>new</code> — целевые категории (1 = «цветы», 2 = «деревья»).</li>
+              </ul>
+            </li>
+          </ol>
+          <p><strong>Принцип:</strong> исходные варианты объединяются в группы (например, «тюльпан» и «нарцисс» → «цветы», «яблоня» → «деревья»).</p>
+
+          <div class="block-checks" aria-label="Отметки блока 1">
+            <label><input class="progress-check" type="checkbox"> Файл Excel создан</label>
+            <label><input class="progress-check" type="checkbox"> 10 строк заполнены</label>
+            <label><input class="progress-check" type="checkbox"> Коды в колонке <code>new</code> указаны</label>
+          </div>
+        </div>
         <figure>
           <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/table.png" alt="Пример таблицы code / text / new">
           <figcaption>Пример структуры таблицы</figcaption>
         </figure>
       </div>
-      <div class="block-checks" aria-label="Отметки блока 1">
-        <label><input type="checkbox"> Файл Excel создан</label>
-        <label><input type="checkbox"> 10 строк заполнены</label>
-        <label><input type="checkbox"> Коды в колонке <code>new</code> указаны</label>
-      </div>
     </section>
 
-    <!-- 2) RAW -->
+    <!-- 2) RAW: две картинки по центру -->
     <section class="step" id="raw">
       <h2>2) Вставьте таблицу в окне Raw</h2>
       <ol>
         <li>Создайте новый вопрос <code>q1</code> (Single Choice).</li>
-        <li>Нажмите иконку <em>Raw</em>, чтобы сделать её активной.</li>
-        <li>Удалите весь текст в окне и вставьте подготовленную таблицу, затем сохраните.</li>
+        <li>Нажмите иконку <em>Raw</em>, вставьте таблицу, сохраните.</li>
       </ol>
-      <div class="shots">
-        <figure>
-          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Raw.png" alt="Raw — пустое поле">
-          <figcaption>Raw: пустое поле</figcaption>
-        </figure>
+
+      <div class="shots shots-2 centered">
         <figure>
           <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Raw2.png" alt="Raw — вставленная таблица">
           <figcaption>Raw: таблица вставлена</figcaption>
         </figure>
-        </div>
+        <figure>
+          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Raw3.png" alt="Список опций после закрытия Raw">
+          <figcaption>После сохранения — список опций</figcaption>
+        </figure>
+      </div>
+
       <div class="block-checks" aria-label="Отметки блока 2">
-        <label><input type="checkbox"> Вопрос <code>q1</code> создан</label>
-        <label><input type="checkbox"> Таблица вставлена в Raw</label>
-        <label><input type="checkbox"> Изменения сохранены</label>
+        <label><input class="progress-check" type="checkbox"> Вопрос <code>q1</code> создан</label>
+        <label><input class="progress-check" type="checkbox"> Таблица вставлена и сохранена</label>
       </div>
     </section>
 
     <!-- 3) КОНСТРУКТОР -->
     <section class="step" id="constructor">
       <h2>3) Вернитесь в режим конструктора</h2>
-      <p>Нажмите иконку Raw и убедитесь, что все строки считались. Атрибут <code>new</code> записан внутри вариантов ответов в <code>q1</code> (внешне список не меняется).</p>
-      <div class="shots">
-        <figure>
-          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Raw3.png" alt="Список опций после вставки">
-          <figcaption>Список опций в режиме конструктора</figcaption>
-        </figure>
-      </div>
+      <p>Убедитесь, что строки считались. Атрибут <code>new</code> записан внутри вариантов ответов в <code>q1</code> (внешне список не меняется).</p>
       <div class="block-checks" aria-label="Отметки блока 3">
-        <label><input type="checkbox"> Окно Raw закрыто</label>
-        <label><input type="checkbox"> Изменения в <code>q1</code> сохранены</label>
+        <label><input class="progress-check" type="checkbox"> Окно Raw закрыто</label>
+        <label><input class="progress-check" type="checkbox"> Изменения в <code>q1</code> сохранены</label>
       </div>
     </section>
 
     <!-- 4) Q2 -->
     <section class="step" id="q2">
-      <h2>4) Создайте второй вопрос Single Choice (q2) с вариантами ответов из <code>new</code></h2>
+      <h2>4) Создайте второй вопрос Single Choice (q2) с вариантами из <code>new</code></h2>
       <ol>
         <li>Добавьте новый вопрос Single Choice — <code>q2</code>.</li>
         <li>Создайте варианты: 1 — «цветы», 2 — «деревья».</li>
@@ -266,35 +199,54 @@
         </figure>
       </div>
       <div class="block-checks" aria-label="Отметки блока 4">
-        <label><input type="checkbox"> Вопрос <code>q2</code> создан</label>
-        <label><input type="checkbox"> Варианты из <code>new</code> добавлены</label>
+        <label><input class="progress-check" type="checkbox"> Вопрос <code>q2</code> создан</label>
+        <label><input class="progress-check" type="checkbox"> Варианты из <code>new</code> добавлены</label>
       </div>
     </section>
 
-    <!-- 5) RECODE -->
+    <!-- 5) RECODE: текст → картинка по шагам -->
     <section class="step" id="recode">
       <h2>5) Настройте фильтр <em>recode by attribute</em> для <code>q2</code></h2>
-      <ol>
-        <li>Нажмите <em>Filter</em> <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Filter.png" alt="Иконка Filter" style="display:inline;height:22px;vertical-align:middle;margin:0 6px;border-radius:6px">, затем «карандаш» <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Edit.png" alt="Кнопка Edit" style="display:inline;height:22px;vertical-align:middle;margin:0 6px;border-radius:6px">.</li>
-        <li>Выберите правило <em>Recode by attribute</em>.</li>
-        <li>Укажите: <strong>from:</strong> <code>q1</code>, <strong>attribute:</strong> <code>new</code>.</li>
-        <li>Сохраните правило.</li>
-      </ol>
+
       <div class="shots">
-        <figure>
-          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Recode2.png" alt="Панель выбора правила Recode by attribute">
-          <figcaption>Выбор правила</figcaption>
-        </figure>
-        <figure>
-          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Recode3.png" alt="Заполненные параметры q1/new">
-          <figcaption>Параметры: from q1, attribute new</figcaption>
-        </figure>
+        <div>
+          <p>Нажмите <strong>Filter</strong>, чтобы активировать окно редактора логики.</p>
+          <figure>
+            <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Filter.png" alt="Иконка Filter">
+            <figcaption>Открываем панель логики (Filter)</figcaption>
+          </figure>
+        </div>
+
+        <div>
+          <p>Зайдите в панель с командами логики, нажав на «карандаш».</p>
+          <figure>
+            <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Edit.png" alt="Кнопка Edit (карандаш)">
+            <figcaption>Переход к редактированию правила (Edit)</figcaption>
+          </figure>
+        </div>
+
+        <div>
+          <p>Выберите правило <strong>Recode by attribute</strong>.</p>
+          <figure>
+            <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Recode2.png" alt="Выбор Recode by attribute">
+            <figcaption>Выбор правила</figcaption>
+          </figure>
+        </div>
+
+        <div>
+          <p>В поле <em>Select option</em> укажите вопрос <strong>q1</strong>.  
+            В <em>пустом окне</em> введите название атрибута для перекодировки — <strong>new</strong>.</p>
+          <figure>
+            <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Recode3.png" alt="Параметры: from q1, attribute new">
+            <figcaption>Параметры: from q1, attribute new</figcaption>
+          </figure>
+        </div>
       </div>
+
       <div class="block-checks" aria-label="Отметки блока 5">
-        <label><input type="checkbox"> Открыт Filter → Edit</label>
-        <label><input type="checkbox"> Выбрано правило «Recode by attribute»</label>
-        <label><input type="checkbox"> Указаны from=<code>q1</code>, attribute=<code>new</code></label>
-        <label><input type="checkbox"> Правило сохранено</label>
+        <label><input class="progress-check" type="checkbox"> Открыт Filter и Edit</label>
+        <label><input class="progress-check" type="checkbox"> Выбрано «Recode by attribute»</label>
+        <label><input class="progress-check" type="checkbox"> Указаны q1 и атрибут <code>new</code></label>
       </div>
     </section>
 
@@ -302,39 +254,28 @@
     <section class="step" id="hide-q2">
       <h2>6) Скройте вопрос <code>q2</code> от респондентов</h2>
       <ol>
-        <li>Сделайте апдейт ссылки и проверьте корректность работы перекодировки.</li>
+        <li>Проверьте корректность работы перекодировки.</li>
         <li>На панели логики выберите <strong>ASK NEVER</strong> и сохраните.</li>
       </ol>
       <div class="block-checks" aria-label="Отметки блока 6">
-        <label><input type="checkbox"> Перекодировка работает корректно</label>
-        <label><input type="checkbox"> <code>q2</code> скрыт (ASK NEVER)</label>
+        <label><input class="progress-check" type="checkbox"> Перекодировка работает корректно</label>
+        <label><input class="progress-check" type="checkbox"> <code>q2</code> скрыт (ASK NEVER)</label>
       </div>
     </section>
 
-    <!-- ЧАСТЫЕ ОШИБКИ -->
-    <section class="step" id="faq">
-      <h2>Частые ошибки и быстрые решения</h2>
-      <ul>
-        <li><strong>Источник не тот.</strong> В <em>Select Option</em> должен быть выбран именно <code>q1</code>.</li>
-        <li><strong>Опечатка в названии свойства.</strong> <code>new</code> должно совпадать до символа и регистра.</li>
-        <li><strong>Нет вариантов из атрибута <code>new</code> в <code>q2</code>.</strong> Добавьте их вручную перед настройкой перекодировки.</li>
-        <li><strong>Не все коды <code>new</code> указаны в <code>q2</code>.</strong> Если использовали 1..5, пропишите все 5 значений.</li>
-      </ul>
-    </section>
-
-    <!-- ОБЩИЙ ЧЕК-ЛИСТ — перенесён в КОНЕЦ -->
+    <!-- ИТОГ -->
     <section class="step" id="checklist">
       <h2>Итоговый чек-лист</h2>
       <div class="meta">Отметьте всё — и кнопка завершения станет активной</div>
       <div class="block-checks">
-        <label><input type="checkbox"> Подготовлен Excel с колонками <code>code</code>, <code>text</code>, <code>new</code></label>
-        <label><input type="checkbox"> Таблица вставлена в Raw и сохранена</label>
-        <label><input type="checkbox"> Создан вопрос <code>q2</code> и добавлены коды из <code>new</code></label>
-        <label><input type="checkbox"> Настроен фильтр <em>recode by attribute</em></label>
-        <label><input type="checkbox"> <code>q2</code> скрыт (ASK NEVER), проверена работа</label>
+        <label><input class="progress-check" type="checkbox"> Подготовлен Excel с колонками <code>code</code>, <code>text</code>, <code>new</code></label>
+        <label><input class="progress-check" type="checkbox"> Таблица вставлена в Raw и сохранена</label>
+        <label><input class="progress-check" type="checkbox"> Создан вопрос <code>q2</code> и добавлены коды из <code>new</code></label>
+        <label><input class="progress-check" type="checkbox"> Настроен <em>recode by attribute</em></label>
+        <label><input class="progress-check" type="checkbox"> <code>q2</code> скрыт (ASK NEVER), проверена работа</label>
       </div>
       <hr>
-      <a id="finish" class="btn" href="#top" disabled>Квест пройден ✓</a>
+      <a id="finish" class="btn" href="#top" aria-disabled="true">Квест пройден ✓</a>
       <p class="subtitle">Кнопка активируется автоматически, когда все чекбоксы отмечены.</p>
     </section>
   </main>
@@ -343,8 +284,106 @@
   <aside class="progress-dock" aria-live="polite" aria-label="Прогресс квеста">
     <div class="head">
       <strong>Прогресс квеста</strong>
-      <span class="mute
+      <span class="muted" id="progress-label">0% выполнено</span>
+    </div>
+    <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+  </aside>
 
+  <script>
+  (function(){
+    const $ = (q, el=document)=>el.querySelector(q);
+    const $$ = (q, el=document)=>Array.from(el.querySelectorAll(q));
 
+    /* ---------- TOC ---------- */
+    function initTOC(){
+      const h2s = $$('main h2');
+      if (!h2s.length) return;
+      const toc = document.createElement('nav');
+      toc.className = 'toc';
+      toc.setAttribute('aria-label','Оглавление');
+      toc.innerHTML = '<h3>Оглавление</h3><div class="toc-links"></div>';
+      const wrap = $('.doc') || document.body;
+      wrap.prepend(toc);
+      const linksWrap = $('.toc-links', toc);
+      h2s.forEach(h=>{
+        const id = h.id || h.textContent.trim().toLowerCase().replace(/\s+/g,'-').replace(/[^\w\-]+/g,'');
+        h.id = id;
+        const a = document.createElement('a');
+        a.href = `#${id}`;
+        a.textContent = h.textContent.replace(/^\d+\)\s*/,'');
+        linksWrap.appendChild(a);
+      });
+      const obs = new IntersectionObserver((ents)=>{
+        ents.forEach(ent=>{
+          if(ent.isIntersecting){
+            const id = ent.target.id;
+            $$('.toc a').forEach(a=>a.classList.toggle('active', a.getAttribute('href') === '#'+id));
+          }
+        });
+      }, {rootMargin:'-40% 0px -55% 0px', threshold: 0.01});
+      h2s.forEach(h=>obs.observe(h));
+    }
 
+    /* ---------- ПРОГРЕСС ---------- */
+    const STORAGE_KEY = 'quest_step1_checks_all_v2';
+    const bar = $('#progress-bar');
+    const label = $('#progress-label');
+    const finish = $('#finish');
 
+    function getChecks(){ return $$('.progress-check'); } // считаем только отмечаемые чекбоксы
+
+    function restore(){
+      try{
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        getChecks().forEach((c,i)=> c.checked = !!saved[i]);
+      }catch(e){}
+      update();
+    }
+
+    function save(){
+      const arr = getChecks().map(c=> c.checked ? 1 : 0);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+    }
+
+    function update(){
+      const checks = getChecks();
+      const done = checks.filter(c=>c.checked).length;
+      const total = checks.length || 1;
+      const pct = Math.round(done/total*100);
+      if (bar) bar.style.width = pct + '%';
+      if (label) label.textContent = pct + '% выполнено';
+      // кнопка завершения — теперь корректно блокируется/разблокируется
+      if (finish){
+        const allDone = done === total;
+        finish.setAttribute('aria-disabled', allDone ? 'false' : 'true');
+        // визуальный лёгкий "пинг" при достижении 100%
+        if (allDone) finish.style.boxShadow = '0 0 0 3px rgba(34,197,94,.25)';
+        else finish.style.boxShadow = '';
+      }
+    }
+
+    // Делегирование: одно событие на документ
+    document.addEventListener('change', (e)=>{
+      if (e.target && e.target.matches('.progress-check')){
+        save(); update();
+      }
+    });
+
+    // Плавная прокрутка якорей
+    document.addEventListener('click', (e)=>{
+      const a = e.target.closest('a[href^="#"]'); if(!a) return;
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id); if(!el) return;
+      e.preventDefault();
+      el.scrollIntoView({behavior:'smooth', block:'start'});
+      history.replaceState(null, '', '#'+id);
+    });
+
+    window.addEventListener('DOMContentLoaded', ()=>{
+      initTOC();
+      restore();
+    });
+  })();
+  </script>
+</body>
+</html>
