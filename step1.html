@@ -102,6 +102,16 @@
 .backtotoc a:hover {
   text-decoration: underline;
 }
+.backtotoc a {
+  color: var(--brand);     /* синий цвет */
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.backtotoc a:hover {
+  color: var(--brand-2);   /* голубой при наведении */
+  text-decoration: underline;
+}
 
 
   </style>
@@ -158,7 +168,8 @@
           <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/table.png" alt="Пример таблицы code / text / new">
           <figcaption>Пример структуры таблицы</figcaption>
         </figure>
-        <p class="backtotoc"><a href="#toc-anchor">↑ К оглавлению</a></p>
+       <p class="backtotoc"><a href="#toc-anchor">↑ К оглавлению</a></p>
+
       </div>
     </section>
 
@@ -186,6 +197,8 @@
       <div class="block-checks" aria-label="Отметки блока 2">
         <label><input class="progress-check" type="checkbox"> Вопрос <code>q1</code> создан</label>
         <label><input class="progress-check" type="checkbox"> Таблица вставлена и сохранена</label>
+        <p class="backtotoc"><a href="#toc-anchor">↑ К оглавлению</a></p>
+
       </div>
     </section>
 
@@ -201,6 +214,8 @@
       <div class="block-checks" aria-label="Отметки блока 3">
         <label><input class="progress-check" type="checkbox"> Окно Raw закрыто</label>
         <label><input class="progress-check" type="checkbox"> Изменения в <code>q1</code> сохранены</label>
+        <p class="backtotoc"><a href="#toc-anchor">↑ К оглавлению</a></p>
+
       </div>
     </section>
 
@@ -224,6 +239,8 @@
           <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/q2.png" alt="Вопрос q2: 1 цветы, 2 деревья">
           <figcaption>q2: целевые ответы</figcaption>
         </figure>
+        <p class="backtotoc"><a href="#toc-anchor">↑ К оглавлению</a></p>
+
       </div>
     </section>
 
@@ -238,6 +255,7 @@
             <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Filter.png" alt="Иконка Filter">
             <figcaption>Открываем панель логики (Filter)</figcaption>
           </figure>
+          
         </div>
 
         <div class="stepcard">
@@ -274,6 +292,8 @@
         <label><input class="progress-check" type="checkbox"> Открыт Filter и Edit</label>
         <label><input class="progress-check" type="checkbox"> Выбрано «Recode by attribute»</label>
         <label><input class="progress-check" type="checkbox"> Указаны q1 и атрибут <code>new</code></label>
+        <p class="backtotoc"><a href="#toc-anchor">↑ К оглавлению</a></p>
+
       </div>
     </section>
 
@@ -289,6 +309,8 @@
       <div class="block-checks" aria-label="Отметки блока 6">
         <label><input class="progress-check" type="checkbox"> Перекодировка работает корректно</label>
         <label><input class="progress-check" type="checkbox"> <code>q2</code> скрыт (ASK NEVER)</label>
+        <p class="backtotoc"><a href="#toc-anchor">↑ К оглавлению</a></p>
+
       </div>
     </section>
 
@@ -442,6 +464,7 @@ if (anchor) {
   </script>
 </body>
 </html>
+
 
 
 
