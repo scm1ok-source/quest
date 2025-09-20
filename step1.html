@@ -5,298 +5,205 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Квест «Перекодировка через атрибуты» — Step 1</title>
 
-  <!-- ===== СТИЛИ (светлая тема, крупнее шрифты, авто-скейл изображений) ===== -->
   <style>
     :root{
-      /* Светлая тема */
-      --bg:#ffffff;             /* фон страницы */
-      --panel:#ffffff;          /* карточки/панели */
-      --text:#0f172a;           /* основной текст (синий-уголь) */
-      --muted:#475569;          /* вторичный текст (сланцевый) */
-      --line:#e2e8f0;           /* делители/границы */
-      --brand:#2563eb;          /* акцент (индиго/синий) */
-      --brand-2:#06b6d4;        /* доп. акцент (циан) */
-      --ok:#16a34a;
-      --warn:#d97706;
-      --err:#dc2626;
-      --radius:16px;
-      --shadow:0 10px 30px rgba(2,6,23,.08);
-      --w: 940px;               /* ширина колонки контента (шире) */
+      --bg:#ffffff;
+      --panel:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --line:#e2e8f0;
+      --brand:#2563eb;
+      --brand-2:#06b6d4;
+      --ok:#16a34a; --warn:#d97706; --err:#dc2626;
+      --radius:16px; --shadow:0 10px 30px rgba(2,6,23,.08);
+      --w: 940px;
     }
-
-    /* Крупнее базовый размер и комфортная межстрочность */
     html,body{
-      margin:0; padding:0;
-      background:var(--bg); color:var(--text);
+      margin:0; padding:0; background:var(--bg); color:var(--text);
       font: 18px/1.7 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,Arial,sans-serif;
-      text-rendering: optimizeLegibility;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
+    /* авто-скейл и авто-выравнивание картинок */
+    img{display:block; max-width:100%; height:auto; object-fit:contain; border-radius:12px; margin-inline:auto}
+    .doc{max-width:var(--w); margin:32px auto 120px; padding:0 22px}
+    .hero{background: radial-gradient(1200px 500px at 50% -160px, rgba(37,99,235,.08), transparent 60%); padding:22px 0 10px; margin-bottom:8px}
+    .title{font-size: clamp(30px, 4.8vw, 44px); font-weight:800; margin:0 0 6px}
+    .subtitle{color:var(--muted); font-size:16px; margin:0}
 
-    /* Изображения: авто-скейл, авто-выравнивание по центру */
-    img{
-      display:block;             /* чтобы margin:auto центрировал */
-      max-width:100%;
-      height:auto;               /* сохраняем пропорции */
-      object-fit: contain;       /* безопасная вписка в контейнер */
-      border-radius:12px;
-      margin-inline:auto;        /* центрирование в колоночном лэйауте */
-    }
+    .toc{position:sticky; top:16px; background:linear-gradient(180deg,#ffffffcc,#ffffffa8);
+      border:1px solid var(--line); border-radius:var(--radius); padding:16px 16px 12px; box-shadow:var(--shadow); backdrop-filter:blur(6px); margin:20px 0 24px}
+    .toc h3{margin:0 0 10px; font-size:15px; color:var(--muted); font-weight:700; letter-spacing:.3px; text-transform:uppercase}
+    .toc a{display:block; padding:8px; border-radius:12px; color:var(--text); text-decoration:none; border:1px solid transparent; font-size:17px}
+    .toc a:hover{background:rgba(37,99,235,.06); border-color:rgba(37,99,235,.2)}
+    .toc a.active{background:rgba(37,99,235,.1); border-color:rgba(37,99,235,.35)}
 
-    /* Контейнер колонки */
-    .doc{
-      max-width: var(--w);
-      margin: 32px auto 120px;
-      padding: 0 22px;
-    }
-
-    /* Шапка (легкий градиент без затемнения) */
-    .hero{
-      background: radial-gradient(1200px 500px at 50% -160px, rgba(37,99,235,.08), transparent 60%);
-      padding: 22px 0 10px;
-      margin-bottom: 8px;
-    }
-    .title{
-      font-size: clamp(30px, 4.8vw, 44px); /* крупнее заголовок */
-      font-weight: 800;
-      letter-spacing: .2px;
-      margin: 0 0 6px;
-    }
-    .subtitle{
-      color: var(--muted);
-      font-size: 16px;
-      margin: 0;
-    }
-
-    /* Оглавление (sticky, светлое) */
-    .toc{
-      position: sticky; top: 16px;
-      background: linear-gradient(180deg, #ffffffcc, #ffffffa8);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 16px 16px 12px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(6px);
-      margin: 20px 0 24px;
-    }
-    .toc h3{margin:0 0 10px;font-size:15px;color:var(--muted);font-weight:700;letter-spacing:.3px;text-transform:uppercase}
-    .toc a{
-      display:block;padding:8px 8px;border-radius:12px;
-      color:var(--text);text-decoration:none;border:1px solid transparent;
-      font-size: 17px;
-    }
-    .toc a:hover{background:rgba(37,99,235,.06);border-color:rgba(37,99,235,.20)}
-    .toc a.active{background:rgba(37,99,235,.10);border-color:rgba(37,99,235,.35)}
-
-    /* Карточки шагов (светлые) */
-    .step{
-      background: var(--panel);
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      padding:22px 18px;
-      margin: 18px 0;
-      box-shadow: var(--shadow);
-    }
-    .step h2{margin: 0 0 12px; font-size: clamp(22px, 2.8vw, 28px)}
-    .step h3{margin-top:16px;margin-bottom:10px}
-    .step .meta{color:var(--muted);font-size:14px;margin-bottom:10px}
-
-    /* Сетка скриншотов — авто-адаптивная */
-    .shots{
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-      gap:14px; margin:12px 0
-    }
+    .step{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+      padding:22px 18px; margin:18px 0; box-shadow:var(--shadow)}
+    .step h2{margin:0 0 12px; font-size: clamp(22px, 2.8vw, 28px)}
+    .step .meta{color:var(--muted); font-size:14px; margin-bottom:10px}
+    .shots{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; margin:12px 0}
     figure{margin:0}
-    figcaption{color:var(--muted);font-size:13px;margin-top:8px;text-align:center}
+    figcaption{color:var(--muted); font-size:13px; margin-top:8px; text-align:center}
 
-    /* Callout */
-    .callout{
-      border-left: 5px solid var(--brand);
-      background: rgba(37,99,235,.08);
-      padding: 12px 14px;
-      border-radius: 12px;
-      margin: 14px 0;
-      font-size: 17px;
-    }
-    .callout.warn{border-left-color:var(--warn);background: rgba(217,119,6,.08)}
-    .callout.ok{border-left-color:var(--ok);background: rgba(22,163,74,.08)}
+    .callout{border-left:5px solid var(--brand); background:rgba(37,99,235,.08); padding:12px 14px; border-radius:12px; margin:14px 0; font-size:17px}
+    .callout.warn{border-left-color:var(--warn); background:rgba(217,119,6,.08)}
+    .callout.ok{border-left-color:var(--ok); background:rgba(22,163,74,.08)}
 
-    /* Чек-лист + прогресс */
-    .checklist{display:grid;gap:10px;margin:10px 0}
-    .checklist label{
-      display:flex;gap:12px;align-items:flex-start;
-      background:#f8fafc;border:1px solid var(--line);padding:10px 12px;border-radius:12px;
-      font-size: 17px;
-    }
-    .checklist input{transform: translateY(2px);}
+    .checklist{display:grid; gap:10px; margin:10px 0}
+    .checklist label{display:flex; gap:12px; align-items:flex-start; background:#f8fafc; border:1px solid var(--line); padding:10px 12px; border-radius:12px; font-size:17px}
+    .checklist input{transform:translateY(2px)}
+    .progress{width:100%; height:12px; border-radius:999px; background:#f1f5f9; border:1px solid var(--line); overflow:hidden}
+    .progress>span{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--brand),var(--brand-2)); transition:width .35s ease}
 
-    .progress{
-      width:100%;height:12px;border-radius:999px;background:#f1f5f9;border:1px solid var(--line);overflow:hidden
-    }
-    .progress > span{
-      display:block;height:100%;width:0%;
-      background: linear-gradient(90deg, var(--brand), var(--brand-2));
-      transition:width .35s ease;
-    }
+    .progress-dock{position:fixed; right:16px; bottom:16px; z-index:999; width:min(420px,92vw);
+      background:#ffffffee; border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow); padding:14px 16px; backdrop-filter:blur(6px)}
+    .progress-dock .head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px}
+    .progress-dock .muted{color:var(--muted); font-size:14px}
 
-    /* Плавающая карточка прогресса (fixed, светлая) */
-    .progress-dock{
-      position: fixed; right: 16px; bottom: 16px; z-index: 999;
-      width: min(420px, 92vw);
-      background: #ffffffee;
-      border:1px solid var(--line);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      padding: 14px 16px;
-      backdrop-filter: blur(6px);
-    }
-    .progress-dock .head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
-    .progress-dock .muted{color:var(--muted);font-size:14px}
+    .btn{display:inline-flex; align-items:center; gap:10px; padding:12px 16px; border-radius:14px;
+      border:1px solid rgba(37,99,235,.35); background:rgba(37,99,235,.08); color:var(--text);
+      text-decoration:none; font-weight:700; transition:transform .08s ease, background .2s ease, border-color .2s ease; font-size:17px}
+    .btn:hover{transform:translateY(-1px); background:rgba(37,99,235,.12); border-color:rgba(37,99,235,.55)}
+    .btn:disabled{opacity:.6; cursor:not-allowed}
 
-    /* Кнопки */
-    .btn{
-      display:inline-flex;align-items:center;gap:10px;
-      padding:12px 16px;border-radius:14px;border:1px solid rgba(37,99,235,.35);
-      background: rgba(37,99,235,.08); color: var(--text); text-decoration:none; font-weight:700;
-      transition: transform .08s ease, background .2s ease, border-color .2s ease;
-      font-size: 17px;
-    }
-    .btn:hover{transform: translateY(-1px); background: rgba(37,99,235,.12); border-color: rgba(37,99,235,.55)}
-    .btn:disabled{opacity:.6;cursor:not-allowed}
+    a{color:#1d4ed8} code,kbd{background:#f1f5f9; border:1px solid var(--line); padding:2px 6px; border-radius:8px}
+    hr{border:none; border-top:1px solid var(--line); margin:24px 0} ul,ol{padding-left:24px}
 
-    /* Ссылки и код */
-    a{color:#1d4ed8}
-    code,kbd{background:#f1f5f9;border:1px solid var(--line);padding:2px 6px;border-radius:8px}
-
-    /* Делители + списки */
-    hr{border:none;border-top:1px solid var(--line);margin:24px 0}
-    ul,ol{padding-left: 24px}
-
-    /* Адаптив */
-    @media (max-width: 720px){
-      .doc{margin-bottom: 170px}
-      .toc{position: static}
-    }
+    @media (max-width: 720px){ .doc{margin-bottom:170px} .toc{position:static} }
   </style>
 </head>
-
 <body>
   <a id="top"></a>
-  <noscript>
-    <div style="background:#fee2e2;color:#7f1d1d;padding:10px 14px">
-      Для работы оглавления и прогресса включите JavaScript.
-    </div>
-  </noscript>
-
-  <!-- ===== ШАПКА ===== -->
-  <header class="hero" role="banner">
+  <header class="hero">
     <div class="doc">
       <h1 class="title">Квест «Перекодировка через атрибуты»</h1>
       <p class="subtitle">Step 1 · Пошаговый гайд для Recode by attribute</p>
     </div>
   </header>
 
-  <!-- ===== КОНТЕНТ ===== -->
-  <main class="doc" role="main">
-    <!-- Оглавление сгенерируется автоматически по h2 -->
+  <main class="doc">
+    <!-- TOC вставится скриптом автоматически -->
 
-    <!-- Чек-лист прогресса -->
-    <section class="step" aria-labelledby="checklist">
-      <h2 id="checklist">Чек-лист перед стартом</h2>
-      <div class="meta">Отметьте пункты — индикатор прогресса обновится автоматически</div>
-      <div class="checklist">
-        <label><input type="checkbox" /> Подготовлен Excel с колонками <code>code</code>, <code>text</code>, <code>new</code></label>
-        <label><input type="checkbox" /> Таблица загружена в репозиторий (Raw) и доступна по URL</label>
-        <label><input type="checkbox" /> Создан вопрос <code>q2</code> и добавлены коды из <code>new</code></label>
-        <label><input type="checkbox" /> Настроен фильтр <em>recode by attribute</em></label>
-        <label><input type="checkbox" /> Вопрос <code>q2</code> скрыт (ASK NEVER), проверена работа</label>
-      </div>
-    </section>
-
-    <!-- 0 -->
-    <section class="step" aria-labelledby="need">
-      <h2 id="need">0) Что понадобится</h2>
+    <section class="step" id="need">
+      <h2>0) Что понадобится</h2>
       <ul>
-        <li>Таблица соответствий кодов: колонки <code>code</code> (исходный), <code>text</code> (подпись), <code>new</code> (целевой код).</li>
-        <li>Доступ к репозиторию GitHub Pages (папка проекта).</li>
+        <li>Excel-таблица с колонками <code>code</code>, <code>text</code>, <code>new</code>.</li>
+        <li>Доступ к репозиторию GitHub Pages.</li>
         <li>Браузер с включённым JavaScript.</li>
       </ul>
-      <div class="callout">Совет: названия атрибутов — латиницей, без пробелов, чувствительны к регистру.</div>
-
-      <!-- Пример сетки для скриншотов -->
-      <!--
       <div class="shots">
         <figure>
-          <img src="img/step0_excel.png" alt="Пример Excel-таблицы с колонками code, text, new">
-          <figcaption>Excel: базовая структура таблицы</figcaption>
+          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Raw1.png" alt="Поле Raw — вкладка и поле ввода">
+          <figcaption>Поле Raw — вкладка и поле ввода</figcaption>
         </figure>
         <figure>
-          <img src="img/step0_repo.png" alt="Страница репозитория GitHub">
-          <figcaption>Репозиторий GitHub: загрузка файла</figcaption>
+          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/FilterAndPen.png" alt="Иконка фильтра и кнопка редактирования (карандаш)">
+          <figcaption>Иконка фильтра и «карандаш»</figcaption>
+        </figure>
+        <figure>
+          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Recode.png" alt="Настройка правила Recode by attribute">
+          <figcaption>Правило «Recode by attribute»</figcaption>
         </figure>
       </div>
-      -->
     </section>
 
-    <!-- 1 -->
-    <section class="step" aria-labelledby="excel">
-      <h2 id="excel">1) Подготовка данных в Excel</h2>
+    <section class="step" id="excel">
+      <h2>1) Подготовьте таблицу в Excel с колонками <code>code</code>, <code>text</code>, <code>new</code></h2>
       <ol>
-        <li>Создайте книгу с листом <em>mapping</em> и тремя колонками: <code>code</code>, <code>text</code>, <code>new</code>.</li>
-        <li>Сохраните файл в формате <code>.xlsx</code> или выгрузите CSV в UTF-8.</li>
+        <li>Создайте лист <em>mapping</em> с тремя колонками.</li>
+        <li>Заполните значения и сохраните файл (.xlsx или CSV UTF-8).</li>
       </ol>
-      <div class="callout ok">Проверка: отсутствуют пропуски в колонке <code>new</code>, коды уникальны.</div>
+      <div class="shots">
+        <figure>
+          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/table.png" alt="Пример таблицы code / text / new">
+          <figcaption>Пример структуры таблицы</figcaption>
+        </figure>
+      </div>
+      <div class="callout ok">Проверка: колонка <code>new</code> без пропусков, целевые коды уникальны.</div>
     </section>
 
-    <!-- 2 -->
-    <section class="step" aria-labelledby="raw">
-      <h2 id="raw">2) Загрузка файла в репозиторий (Raw)</h2>
+    <section class="step" id="raw">
+      <h2>2) Вставьте таблицу в окне Raw</h2>
       <ol>
-        <li>Откройте ваш репозиторий на GitHub и загрузите файл (<em>Upload files</em>).</li>
-        <li>После коммита откройте файл и нажмите <em>Raw</em> — получите прямую ссылку.</li>
-        <li>Эта ссылка будет использоваться вашим приложением/скриптом для чтения таблицы.</li>
+        <li>Создайте вопрос <code>q1</code> (Single Choice).</li>
+        <li>Откройте режим Raw и вставьте таблицу.</li>
+        <li>Сохраните изменения.</li>
       </ol>
-      <div class="callout warn">Важно: для обновления сайта на GitHub Pages выполните <strong>Commit</strong> (и <strong>Push</strong>, если локально). Изменения станут доступны после сборки Pages.</div>
+      <div class="shots">
+        <figure>
+          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Raw.png" alt="Raw — пустое поле">
+          <figcaption>Raw: пустое поле</figcaption>
+        </figure>
+        <figure>
+          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Raw2.png" alt="Raw — вставленная таблица">
+          <figcaption>Raw: таблица вставлена</figcaption>
+        </figure>
+        <figure>
+          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Raw3.png" alt="Список опций после закрытия Raw">
+          <figcaption>После сохранения — список опций</figcaption>
+        </figure>
+      </div>
     </section>
 
-    <!-- 3 -->
-    <section class="step" aria-labelledby="q2">
-      <h2 id="q2">3) Создание вопроса <code>q2</code> и добавление кодов</h2>
-      <p>Создайте целевой вопрос <code>q2</code> и заранее добавьте варианты ответов на основе колонки <code>new</code>. Это позволит корректно маппить исходные коды.</p>
-      <ul>
-        <li>Тип вопроса соответствует целевой шкале/множественности.</li>
-        <li>Порядок кодов — согласно логике отчётности.</li>
-      </ul>
+    <section class="step" id="q2">
+      <h2>3) Создайте второй вопрос <code>q2</code> с вариантами из <code>new</code></h2>
+      <p>Добавьте ответы: 1 — «цветы», 2 — «деревья», чтобы перекодировка знала возможные целевые коды.</p>
+      <div class="shots">
+        <figure>
+          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/q2.png" alt="Вопрос q2 с вариантами 1: цветы, 2: деревья">
+          <figcaption>q2: целевые ответы</figcaption>
+        </figure>
+      </div>
     </section>
 
-    <!-- 4 -->
-    <section class="step" aria-labelledby="recode">
-      <h2 id="recode">4) Настройка «recode by attribute»</h2>
+    <section class="step" id="recode">
+      <h2>4) Настройте «recode by attribute» для <code>q2</code></h2>
       <ol>
-        <li>Откройте настройки перекодировки.</li>
-        <li>Укажите источник (<code>code</code>) и целевой атрибут (<code>new</code>), подключите файл маппинга по URL.</li>
-        <li>Проверьте предпросмотр — для каждого исходного кода виден целевой.</li>
+        <li>Нажмите <em>Filter</em> <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Filter.png" alt="Иконка Filter" style="display:inline;height:22px;vertical-align:middle;margin:0 6px;border-radius:6px">, затем «карандаш» <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Edit.png" alt="Кнопка Edit" style="display:inline;height:22px;vertical-align:middle;margin:0 6px;border-radius:6px">.</li>
+        <li>Выберите правило <em>Recode by attribute</em>.</li>
+        <li>Укажите: <strong>from:</strong> <code>q1</code>, <strong>attribute:</strong> <code>new</code>.</li>
+        <li>Сохраните правило.</li>
       </ol>
-      <div class="callout">Подсказка: если используется CSV, убедитесь, что разделитель и кодировка UTF-8 распознаны верно.</div>
+      <div class="shots">
+        <figure>
+          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Recode2.png" alt="Панель выбора правила Recode by attribute">
+          <figcaption>Выбор правила</figcaption>
+        </figure>
+        <figure>
+          <img src="https://raw.githubusercontent.com/scm1ok-source/quest/main/Recode3.png" alt="Заполненные параметры q1 / new">
+          <figcaption>Параметры: from q1, attribute new</figcaption>
+        </figure>
+      </div>
+      <div class="callout">Подсказка: если CSV — проверьте разделитель и кодировку UTF-8.</div>
     </section>
 
-    <!-- 5 -->
-    <section class="step" aria-labelledby="check">
-      <h2 id="check">5) Проверка и скрытие <code>q2</code></h2>
+    <section class="step" id="check">
+      <h2>5) Скрытие <code>q2</code> и проверка</h2>
       <ol>
-        <li>Сделайте пробную выгрузку/просмотр данных после перекодировки.</li>
+        <li>Сделайте пробную выгрузку/просмотр после перекодировки.</li>
         <li>Скройте <code>q2</code> (ASK NEVER), если он вспомогательный.</li>
-        <li>Проверьте итоговые отчёты/визуализацию.</li>
+        <li>Проверьте отчёт/визуализацию.</li>
       </ol>
+    </section>
+
+    <!-- ЧЕК-ЛИСТ В КОНЦЕ: логично, когда уже есть что отметить -->
+    <section class="step" id="checklist">
+      <h2>Чек-лист завершения</h2>
+      <div class="meta">Отметьте пункты — индикатор прогресса обновится автоматически</div>
+      <div class="checklist">
+        <label><input type="checkbox" /> Таблица <code>code/text/new</code> подготовлена</label>
+        <label><input type="checkbox" /> Таблица загружена в репозиторий (Raw) и доступна по URL</label>
+        <label><input type="checkbox" /> Создан вопрос <code>q2</code> с вариантами из <code>new</code></label>
+        <label><input type="checkbox" /> Настроен <em>recode by attribute</em> (from <code>q1</code>, attr <code>new</code>)</label>
+        <label><input type="checkbox" /> <code>q2</code> скрыт (ASK NEVER), проверена работа</label>
+      </div>
       <hr>
       <a id="finish" class="btn" href="#top" disabled>Квест пройден ✓</a>
-      <p class="subtitle">Кнопка активируется автоматически, когда все пункты чек-листа отмечены.</p>
+      <p class="subtitle">Кнопка активируется автоматически, когда все пункты отмечены.</p>
     </section>
   </main>
 
-  <!-- ===== ПЛАВАЮЩИЙ ПРОГРЕСС (fixed) ===== -->
+  <!-- Плавающий прогресс -->
   <aside class="progress-dock" aria-live="polite" aria-label="Прогресс квеста">
     <div class="head">
       <strong>Прогресс квеста</strong>
@@ -305,13 +212,12 @@
     <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
   </aside>
 
-  <!-- ===== СКРИПТЫ: TOC + прогресс + плавный скролл ===== -->
   <script>
   (function(){
     const sel = (q, el=document)=>el.querySelector(q);
     const all = (q, el=document)=>Array.from(el.querySelectorAll(q));
 
-    // 1) Оглавление из h2
+    // TOC из h2
     const h2s = all('main h2');
     if (h2s.length){
       const toc = document.createElement('nav');
@@ -329,7 +235,6 @@
         a.textContent = h.textContent.replace(/^\d+\)\s*/,'');
         linksWrap.appendChild(a);
       });
-      // Подсветка активного раздела
       const obs = new IntersectionObserver((ents)=>{
         ents.forEach(ent=>{
           if(ent.isIntersecting){
@@ -341,7 +246,7 @@
       h2s.forEach(h=>obs.observe(h));
     }
 
-    // 2) Чек-лист и прогресс
+    // Прогресс чек-листа
     const storageKey = 'quest_step1_checks';
     const checks = all('.checklist input[type="checkbox"]');
     const progressBar = sel('#progress-bar');
@@ -350,38 +255,29 @@
     function restore(){
       try{
         const saved = JSON.parse(localStorage.getItem(storageKey)||'[]');
-        checks.forEach((c,i)=> c.checked = !!saved[i] );
+        checks.forEach((c,i)=> c.checked = !!saved[i]);
       }catch(e){}
     }
-    function save(){
-      const arr = checks.map(c=> c.checked ? 1 : 0);
-      localStorage.setItem(storageKey, JSON.stringify(arr));
-    }
+    function save(){ localStorage.setItem(storageKey, JSON.stringify(checks.map(c=>c.checked?1:0))); }
     function update(){
       const done = checks.filter(c=>c.checked).length;
       const total = checks.length || 1;
       const pct = Math.round(done/total*100);
       if (progressBar) progressBar.style.width = pct + '%';
       if (progressLabel) progressLabel.textContent = `${pct}% выполнено`;
-      const finishBtn = sel('#finish');
-      if (finishBtn) finishBtn.disabled = pct < 100;
+      const finishBtn = sel('#finish'); if (finishBtn) finishBtn.disabled = pct < 100;
     }
 
     if (checks.length){
-      restore();
-      update();
-      checks.forEach(c=>{
-        c.addEventListener('change', ()=>{ save(); update(); });
-      });
+      restore(); update();
+      checks.forEach(c=> c.addEventListener('change', ()=>{ save(); update(); }));
     }
 
-    // 3) Плавная прокрутка якорей
+    // Плавная прокрутка якорей
     document.addEventListener('click', (e)=>{
-      const a = e.target.closest('a[href^="#"]');
-      if(!a) return;
+      const a = e.target.closest('a[href^="#"]'); if(!a) return;
       const id = a.getAttribute('href').slice(1);
-      const el = document.getElementById(id);
-      if(!el) return;
+      const el = document.getElementById(id); if(!el) return;
       e.preventDefault();
       el.scrollIntoView({behavior:'smooth', block:'start'});
       history.replaceState(null, '', '#'+id);
