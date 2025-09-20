@@ -5,115 +5,256 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Квест «Перекодировка через аттрибуты» — Пошаговая инструкция </title>
   <style>
-    /* === БАЗОВАЯ ТЕМА (светлая) === */
-    :root{
-      --bg:#ffffff; --text:#1e293b; --muted:#475569; --line:#e2e8f0; --card:#f8fafc;
-      --accent:#0ea5e9; --accent-2:#6366f1; --ok:#16a34a; --warn:#d97706; --err:#dc2626;
-    }
-    html,body{height:100%}
-    body{margin:0; background:var(--bg); color:var(--text);
-      font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,"Helvetica Neue",Arial,"Apple Color Emoji","Segoe UI Emoji"}
-    .container{max-width:1100px; margin-inline:auto; padding:32px 20px 80px}
-    header{display:grid; gap:12px; margin-bottom:20px}
-    header h1{font-size:clamp(26px,3vw,36px); margin:0}
-    header p{margin:0; color:var(--muted)}
-    .badge{display:inline-flex; align-items:center; gap:8px; background:#e0f2fe; border:1px solid #7dd3fc; color:#0369a1; padding:6px 10px; border-radius:999px; font-size:13px}
-    .kbd{display:inline-block; padding:.15em .45em; border:1px solid #cbd5e1; border-radius:6px; background:#f1f5f9; font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:.9em}
+  /* ===== БАЗОВАЯ ТЕМА ===== */
+  :root{
+    --bg:#0b1220;          /* тёмно-синий фон */
+    --panel:#0f172a;       /* панель/карточки */
+    --text:#e2e8f0;        /* основной текст */
+    --muted:#94a3b8;       /* вторичный текст */
+    --line:#22304a;        /* границы/делители */
+    --brand:#60a5fa;       /* акцент */
+    --brand-2:#22d3ee;     /* доп. акцент */
+    --ok:#22c55e;          /* успех */
+    --warn:#f59e0b;        /* предупреждение */
+    --err:#ef4444;         /* ошибка */
+    --radius:14px;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
+    --w: 880px;            /* ширина колонки контента */
+  }
 
-    /* Карточки и сетки */
-    .card{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px; margin-top:16px}
-    .card h2,.card h3{margin-top:0}
-    .grid{display:grid; gap:16px}
-    .two{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .three{grid-template-columns:repeat(3,minmax(0,1fr))}
-    @media (max-width:920px){.two,.three{grid-template-columns:1fr}}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,Arial,sans-serif;}
+  img{max-width:100%;height:auto;border-radius:12px}
 
-    /* Шаги, плейсхолдеры изображений */
-    .step{position:relative; padding:16px; border-radius:12px; border:1px dashed #cbd5e1; background:#fff}
-    .fig{display:grid; place-items:center; background:#fff; border:2px dashed #cbd5e1; border-radius:12px; padding:14px; min-height:140px; color:#64748b; text-align:center}
-    .fig strong{color:#0f172a}
-    .need{background:#ecfeff; border:1px solid #67e8f9; color:#0369a1; border-radius:10px; padding:10px; font-size:14px}
+  /* Контейнер колонки */
+  .doc{
+    max-width: var(--w);
+    margin: 32px auto 120px;
+    padding: 0 20px;
+  }
 
-    /* Чек-лист, прогресс, подсказки */
-    .checklist label{display:flex; align-items:flex-start; gap:10px; margin:10px 0; cursor:pointer}
-    .checklist input[type="checkbox"]{width:18px; height:18px; accent-color:var(--ok)}
-    .progress{height:8px; background:#e5e7eb; border:1px solid #e5e7eb; border-radius:999px; overflow:hidden}
-    .progress>span{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--accent),var(--accent-2)); transition:width .25s ease}
-    .tip{display:inline-flex; align-items:center; gap:6px; color:var(--accent); cursor:pointer}
-    .popover{position:relative; display:inline-block}
-    .popover-content{position:absolute; inset:auto auto auto 0; transform:translateY(8px); min-width:260px; background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px; box-shadow:0 10px 30px rgba(2,6,23,.12); display:none}
-    .popover[data-open="true"] .popover-content{display:block}
+  /* Шапка */
+  .hero{
+    background: radial-gradient(1200px 500px at 50% -100px, rgba(96,165,250,.25), transparent 60%);
+    padding: 18px 0 6px;
+    margin-bottom: 8px;
+  }
+  .title{
+    font-size: clamp(26px, 4vw, 36px);
+    font-weight: 800;
+    letter-spacing: .2px;
+    margin: 0 0 8px;
+  }
+  .subtitle{
+    color: var(--muted);
+    font-size: 15px;
+    margin: 0;
+  }
 
-    /* Таблица-пример */
-    table{width:100%; border-collapse:collapse}
-    th,td{border:1px solid var(--line); padding:8px 10px}
-    th{background:#eef2ff}
+  /* Оглавление (sticky) */
+  .toc{
+    position: sticky; top: 16px;
+    background: linear-gradient(180deg, rgba(34,48,74,.6), rgba(34,48,74,.35));
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px 14px 10px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(6px);
+    margin: 18px 0 22px;
+  }
+  .toc h3{margin:0 0 8px;font-size:14px;color:var(--muted);font-weight:700;letter-spacing:.3px;text-transform:uppercase}
+  .toc a{display:block;padding:6px 6px;border-radius:10px;color:var(--text);text-decoration:none;border:1px solid transparent}
+  .toc a:hover{background:rgba(96,165,250,.1);border-color:rgba(96,165,250,.25)}
+  .toc a.active{background:rgba(96,165,250,.18);border-color:rgba(96,165,250,.45)}
 
-    /* Итог */
-    .cta{display:flex; align-items:center; justify-content:space-between; gap:14px; margin-top:20px}
-    .btn{appearance:none; border:none; border-radius:12px; padding:12px 16px; font-weight:700; cursor:pointer; color:#fff; background:linear-gradient(135deg, var(--ok), #22c55e)}
-    .btn[disabled]{opacity:.45; cursor:not-allowed}
-    .trophy{width:42px; height:42px; border-radius:50%; display:grid; place-items:center; background:radial-gradient(50% 50% at 50% 50%, rgba(52,211,153,.9), rgba(14,165,233,.85)); box-shadow:0 6px 22px rgba(14,165,233,.25)}
-    .muted{color:var(--muted)}
+  /* Карточки шагов */
+  .step{
+    background: linear-gradient(180deg, rgba(24,33,54,.85), rgba(15,23,42,.85));
+    border:1px solid var(--line);
+    border-radius: var(--radius);
+    padding:18px 16px;
+    margin: 16px 0;
+    box-shadow: var(--shadow);
+  }
+  .step h2{margin: 0 0 10px; font-size: clamp(20px, 2.6vw, 24px)}
+  .step h3{margin-top:14px;margin-bottom:8px}
+  .step .meta{color:var(--muted);font-size:13px;margin-bottom:8px}
 
-    /* === Overrides: подписи и отступ превью === */
+  /* Сетка для скринов */
+  .shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin:10px 0}
+  figure{margin:0}
+  figcaption{color:var(--muted);font-size:12px;margin-top:6px}
 
-/* Убрать подписи под картинками */
-.step figure figcaption{
-  display: none !important;
-}
+  /* Callout-блоки */
+  .callout{
+    border-left: 4px solid var(--brand);
+    background: rgba(96,165,250,.08);
+    padding: 10px 12px;
+    border-radius: 10px;
+    margin: 12px 0;
+  }
+  .callout.warn{border-left-color:var(--warn);background: rgba(245,158,11,.08)}
+  .callout.ok{border-left-color:var(--ok);background: rgba(34,197,94,.08)}
 
-/* Превью чуть ниже заголовка/текста */
-.step figure{
-  margin: 24px 0 12px;   /* было 12px 0; можно увеличить до 28–32px */
-}
+  /* Чек-лист + прогресс (внутри контента) */
+  .checklist{display:grid;gap:8px;margin:8px 0}
+  .checklist label{display:flex;gap:10px;align-items:flex-start;background:rgba(34,48,74,.5);border:1px solid var(--line);padding:8px 10px;border-radius:10px}
+  .checklist input{transform: translateY(2px);}
+  .progress{
+    width:100%;height:10px;border-radius:999px;background:#0b1424;border:1px solid var(--line);overflow:hidden
+  }
+  .progress > span{
+    display:block;height:100%;width:0%;
+    background: linear-gradient(90deg, var(--brand), var(--brand-2));
+    transition:width .35s ease;
+  }
 
-/* На всякий случай: контролируем высоту и вписывание */
-.step figure .media{
-  aspect-ratio: 16 / 9;  /* можно 4/3, если хотите превью выше */
-  width: 100%;
-  display: flex; align-items: center; justify-content: center;
-  background: #fff; overflow: hidden; border-bottom: 1px solid var(--line);
-}
-.step figure img{
-  max-width: 100%; max-height: 100%;
-  width: auto; height: auto; object-fit: contain; display: block;
-}
+  /* Плавающая карточка прогресса (fixed) — для вашей проблемы «не фиксируется» */
+  .progress-dock{
+    position: fixed; right: 16px; bottom: 16px; z-index: 999;
+    width: min(360px, 92vw);
+    background: linear-gradient(180deg, rgba(24,33,54,.9), rgba(15,23,42,.9));
+    border:1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 12px 14px;
+    backdrop-filter: blur(6px);
+  }
+  .progress-dock .head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+  .progress-dock .muted{color:var(--muted);font-size:12px}
 
- /* === FIXED progress dock === */
-#progress-dock{
-position: fixed;
-top: 12px; /* прижать к верхнему краю окна */
-right: 16px; /* плавающий виджет у правого края */
-left: auto;
-width: min(420px, 92vw);
-z-index: 1000;
-background: rgba(255,255,255,0.97);
-backdrop-filter: blur(6px);
-border: 1px solid #e5e7eb;
-box-shadow: 0 8px 24px rgba(2,6,23,.08);
-}
+  /* Кнопки */
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:10px 14px;border-radius:12px;border:1px solid rgba(96,165,250,.35);
+    background: rgba(96,165,250,.12); color: var(--text); text-decoration:none; font-weight:600;
+    transition: transform .08s ease, background .2s ease, border-color .2s ease;
+  }
+  .btn:hover{transform: translateY(-1px); background: rgba(96,165,250,.18); border-color: rgba(96,165,250,.55)}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+
+  /* Ссылки и код */
+  a{color:#93c5fd}
+  code,kbd{background:#0b1424;border:1px solid var(--line);padding:2px 6px;border-radius:8px}
+
+  /* Делители + списки */
+  hr{border:none;border-top:1px solid var(--line);margin:22px 0}
+  ul,ol{padding-left: 22px}
+
+  /* Адаптив */
+  @media (max-width: 720px){
+    .doc{margin-bottom: 160px}
+    .toc{position: static}
+  }
 </style>
 </head>
+
+  <script>
+/* ===== Быстрое TOC + Прогресс квеста с localStorage ===== */
+(function(){
+  const sel = (q, el=document)=>el.querySelector(q);
+  const all = (q, el=document)=>Array.from(el.querySelectorAll(q));
+
+  // 1) Собираем TOC из h2
+  const h2s = all('h2');
+  if (h2s.length){
+    const toc = document.createElement('nav');
+    toc.className = 'toc';
+    toc.innerHTML = '<h3>Оглавление</h3><div class="toc-links"></div>';
+    const wrap = sel('.doc') || document.body;
+    wrap.prepend(toc);
+    const linksWrap = sel('.toc-links', toc);
+    h2s.forEach(h=>{
+      const id = h.id || h.textContent.trim().toLowerCase().replace(/\s+/g,'-').replace(/[^\w\-]+/g,'');
+      h.id = id;
+      const a = document.createElement('a');
+      a.href = `#${id}`;
+      a.textContent = h.textContent.replace(/^\d+\)\s*/,'');
+      linksWrap.appendChild(a);
+    });
+    // Активный пункт
+    const obs = new IntersectionObserver((ents)=>{
+      ents.forEach(ent=>{
+        if(ent.isIntersecting){
+          const id = ent.target.id;
+          all('.toc a').forEach(a=>a.classList.toggle('active', a.getAttribute('href') === '#'+id));
+        }
+      });
+    }, {rootMargin:'-40% 0px -55% 0px', threshold: 0.01});
+    h2s.forEach(h=>obs.observe(h));
+  }
+
+  // 2) Чек-лист и прогресс
+  const storageKey = 'quest_step1_checks';
+  const checks = all('.checklist input[type="checkbox"]');
+  const progressBar = sel('#progress-bar');
+  const progressLabel = sel('#progress-label');
+
+  function restore(){
+    try{
+      const saved = JSON.parse(localStorage.getItem(storageKey)||'[]');
+      checks.forEach((c,i)=> c.checked = !!saved[i] );
+    }catch(e){}
+  }
+  function save(){
+    const arr = checks.map(c=> c.checked ? 1 : 0);
+    localStorage.setItem(storageKey, JSON.stringify(arr));
+  }
+  function update(){
+    const done = checks.filter(c=>c.checked).length;
+    const total = checks.length || 1;
+    const pct = Math.round(done/total*100);
+    if (progressBar) progressBar.style.width = pct + '%';
+    if (progressLabel) progressLabel.textContent = `${pct}% выполнено`;
+    // кнопка "Квест пройден", если есть
+    const finishBtn = sel('#finish');
+    if (finishBtn) finishBtn.disabled = pct < 100;
+  }
+
+  if (checks.length){
+    restore();
+    update();
+    checks.forEach(c=>{
+      c.addEventListener('change', ()=>{ save(); update(); });
+    });
+  }
+
+  // 3) Плавная прокрутка для якорей
+  document.addEventListener('click', (e)=>{
+    const a = e.target.closest('a[href^="#"]');
+    if(!a) return;
+    const id = a.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if(!el) return;
+    e.preventDefault();
+    el.scrollIntoView({behavior:'smooth', block:'start'});
+    history.replaceState(null, '', '#'+id);
+  });
+})();
+</script>
+
 <body>
-<div class="container">
-<header>
-<span class="badge">Квест «Перекодировка через аттрибуты»</span>
-<h1>Пошаговый гайд для <strong>Recode by attribute</strong>.</h1>
-<p>Цель: научиться использовать перекодировку переменных с помощью атрибутов в онлайн‑конструкторе анкет.</p>
-<div id="progress-dock" class="card" role="status" aria-live="polite">
-<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px">
-<strong>Прогресс квеста</strong>
-<span class="muted" id="progress-label">0% выполнено</span>
-</div>
-<div class="progress" aria-label="Прогресс"><span id="progress-bar" style="width:0%"></span></div>
-</div>
-<div class="progress" aria-label="Прогресс"><span id="progress-bar"></span></div>
-</div>
-</header>
+  <div class="hero">
+    <div class="doc">
+      <h1 class="title">Квест «Перекодировка через атрибуты»</h1>
+      <p class="subtitle">Пошаговый гайд для Recode by attribute</p>
+    </div>
+  </div>
+
+  <div class="doc">
+    <!-- Пример чеклиста для шагов (необязательно, но даёт прогресс) -->
+    <div class="step">
+      <div class="meta">Чек-лист</div>
+      <div class="checklist">
+        <label><input type="checkbox"> Подготовлен Excel с колонками <code>code</code>, <code>text</code>, <code>new</code></label>
+        <label><input type="checkbox"> Таблица вставлена в Raw и сохранена</label>
+        <label><input type="checkbox"> Создан вопрос q2 и добавлены коды из <code>new</code></label>
+        <label><input type="checkbox"> Настроен фильтр <em>recode by attribute</em></label>
+        <label><input type="checkbox"> q2 скрыт (ASK NEVER), проверена работа</label>
+      </div>
+    </div>
 
     <!-- Функции конструктора, которые понадобятся -->
-<section class="card">
+ <section class="step">
   <h2>0) Что понадобится</h2>
   <div class="grid three">
 
@@ -159,7 +300,7 @@ box-shadow: 0 8px 24px rgba(2,6,23,.08);
 
 
 <!-- Шаг 1 -->
-<section class="card" id="step1">
+ <section class="step">
 <h2>1) Подготовьте таблицу в Excel с колонками <span class="kbd">code</span>, <span class="kbd">text</span>, <span class="kbd">new</span></h2>
 <div class="step">
 <ol>
@@ -191,19 +332,10 @@ box-shadow: 0 8px 24px rgba(2,6,23,.08);
         </div>
         <figcaption>Таблица пример</figcaption>
       </figure></div>
-<details style="margin-top:10px">
-<pre>01;Вариант 1;A
-02;Вариант 2;A
-03;Вариант 3;A
-04;Вариант 4;A
-05;Вариант 5;B
-06;Вариант 6;B
-07;Вариант 7;B
-08;Вариант 8;C
-09;Вариант 9;C
-10;Вариант 10;C</pre>
-</details>
-<div class="checklist" data-step="1">
+<ul>
+<li><strong></strong>Проверь себя:</strong></li>
+</ul>
+  <div class="checklist" data-step="1">
 <label><input type="checkbox"> Файл Excel создан</label>
 <label><input type="checkbox"> 10 строк заполнены</label>
 <label><input type="checkbox"> Коды для новых обобщенных групп указаны в колонке <span class="kbd">new</span></label>
@@ -213,7 +345,7 @@ box-shadow: 0 8px 24px rgba(2,6,23,.08);
 
     
     <!-- Шаг 2 -->
-    <section class="card" id="step2">
+   <section class="step">
       <h2> 2) Вставьте таблицу в окне <span class="kbd">Raw</span>. </h2>
       <div class="step">
         <ol>
@@ -247,7 +379,7 @@ box-shadow: 0 8px 24px rgba(2,6,23,.08);
     </section>
 
     <!-- Шаг 3 -->
-    <section class="card" id="step3">
+   <section class="step">
       <h2>3) Вернитесь в режим конструктора</h2>
       <div class="step">
         <p>Нажмите иконку <span class="kbd">Raw</span> и убедитесь, что все стрки считались. Аттрибут <span class="kbd">new</span> записан внутри вариантов ответов в q1 (внешне список не меняется).</p>
@@ -266,7 +398,7 @@ box-shadow: 0 8px 24px rgba(2,6,23,.08);
     </section>
 
     <!-- Шаг 4 -->
-    <section class="card" id="step4">
+ <section class="step">
       <h2>4) Создайте второй вопрос Single Choice (q2) с вариантами ответов из <strong>new</strong>strong> </h2>
       <div class="step">
         <ol>
@@ -288,7 +420,7 @@ box-shadow: 0 8px 24px rgba(2,6,23,.08);
     </section>
 
     <!-- Шаг 5 -->
-    <section class="card" id="step5">
+  <section class="step">
       <h2>5) Настройте фильтр <span class="kbd">recode by attribute</span> для q2</h2>
       <div class="step">
         <ol>
@@ -343,7 +475,7 @@ box-shadow: 0 8px 24px rgba(2,6,23,.08);
     </section>
 
    <!-- Шаг 6 -->
-    <section class="card" id="step5">
+ <section class="step">
       <h2>5) Скройте вопрос q2 от респондентов </h2>
       <div class="step">
         <ol>
@@ -368,64 +500,21 @@ box-shadow: 0 8px 24px rgba(2,6,23,.08);
       </div>
     </section>
 
-    <!-- Итог -->
-    <section class="card" id="finish">
-      <h2>Итог и совет</h2>
-      <p><strong>Резюме:</strong> вы научились записывать в переменную ответы через команду «recode by attribute». </p>
-      <p class="muted">Совет: такой подход используется для работы с географией: город - страта - федеральный округ. Как правиль новые переменные, которые получают при перекодировке скрыты от респондентов. </p>
-
-      <div class="cta">
-        <div style="display:flex;align-items:center;gap:12px">
-          <div class="trophy" id="trophy" style="opacity:.35; filter:grayscale(1)" title="Квест‑пройден"></div>
-          <div>
-            <div><strong>«Квест‑пройден»</strong> активируется, когда все чек‑листы отмечены.</div>
-            <div class="muted">Кнопка станет доступной автоматически.</div>
-          </div>
-        </div>
-        <button class="btn" id="doneBtn" disabled>Выполнено</button>
-      </div>
-    </section>
+   <hr>
+    <a id="finish" class="btn" href="#top" disabled>Квест пройден ✓</a>
+    <p class="subtitle">Кнопка активируется автоматически, когда все чек-листы отмечены.</p>
   </div>
 
-  <script>
-    // Прогресс по чек-листам
-    (function(){
-      const checks = Array.from(document.querySelectorAll('.checklist input[type="checkbox"]'));
-      const bar = document.getElementById('progress-bar');
-      const label = document.getElementById('progress-label');
-      const doneBtn = document.getElementById('doneBtn');
-      const trophy = document.getElementById('trophy');
-      function update(){
-        const done = checks.filter(c=>c.checked).length;
-        const total = checks.length || 1;
-        const pct = Math.round(done/total*100);
-        if(bar) bar.style.width = pct + '%';
-        if(label) label.textContent = pct + '% выполнено';
-        if(pct === 100){
-          doneBtn.removeAttribute('disabled');
-          if(trophy){trophy.style.opacity = 1; trophy.style.filter = 'none';}
-        } else {
-          doneBtn.setAttribute('disabled','');
-          if(trophy){trophy.style.opacity = .35; trophy.style.filter = 'grayscale(1)';}
-        }
-      }
-      checks.forEach(c=> c.addEventListener('change', update));
-      update();
-      doneBtn && doneBtn.addEventListener('click', ()=>{
-        alert('Поздравляем! Квест пройден. Перекодировка по свойству настроена.');
-      });
-    })();
+  <!-- Плавающий прогресс (исправляет «не фиксируется») -->
+  <aside class="progress-dock" aria-live="polite">
+    <div class="head">
+      <strong>Прогресс квеста</strong>
+      <span class="muted" id="progress-label">0% выполнено</span>
+    </div>
+    <div class="progress" aria-label="Прогресс"><span id="progress-bar"></span></div>
+  </aside>
+</body></html>
 
-    // Примитивный поповер (если добавим элементы с классом .popover)
-    document.querySelectorAll('.popover').forEach(pop=>{
-      pop.addEventListener('click',()=>{
-        const isOpen = pop.getAttribute('data-open') === 'true';
-        pop.setAttribute('data-open', String(!isOpen));
-      });
-    });
-  </script>
-</body>
-</html>
 
 
 
