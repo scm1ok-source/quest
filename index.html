@@ -175,15 +175,18 @@
     const qs = (s,el=document)=>el.querySelector(s);
     const qsa= (s,el=document)=>Array.from(el.querySelectorAll(s));
 
-    function readProgress(key, expected){
-      try{
-        const saved = JSON.parse(localStorage.getItem(key) || '[]');
-        const total = expected || saved.length || 0;
-        const done  = saved.filter(v => !!v).length;
-        if (total === 0) return 0;
-        return Math.round(done / total * 100);
-      }catch(e){ return 0; }
-    }
+   function readProgress(key, expected){
+  try{
+    const saved = JSON.parse(localStorage.getItem(key) || '[]');
+    const done  = saved.filter(v => !!v).length;
+    const total = Math.max(expected || 0, saved.length);
+    if (!total) return 0;
+    return Math.min(100, Math.round(done / total * 100));
+  }catch(e){
+    return 0;
+  }
+}
+
 
     function setBar(step, pct){
       const bar = qs('#bar-'+step);
