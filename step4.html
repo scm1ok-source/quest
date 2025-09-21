@@ -86,35 +86,22 @@
     <!-- Шаг 2 -->
     <section class="step" id="logic">
       <h2>2) Откройте окно логики (Filter → Edit)</h2>
-      <p>Выберите команду <code>ASK</code> и пропишите условие для показа вопроса.</p>
+      <p>Выберите команду <code>Ask</code> и пропишите условие для показа вопроса.</p>
       <div class="example">
         <p><strong>Пример:</strong></p>
         <pre>
-ASK q5 IF likes_sport = 1
+Ask: IF q4 = 1
         </pre>
-        <p>Это значит: вопрос <code>q5</code> будет задан только тем, у кого переменная <code>likes_sport</code> равна 1.</p>
+        <p>Это значит: вопрос <code>q5</code> будет задан только тем, у кого ответ в <code>q4</code> равен 1.</p>
       </div>
       <p class="meta"><strong>Проверь себя:</strong></p>
       <div class="block-checks">
-        <label><input type="checkbox" class="progress-check"> Команда ASK прописана</label>
+        <label><input type="checkbox" class="progress-check"> Команда Ask прописана</label>
         <label><input type="checkbox" class="progress-check"> Условие if указано верно</label>
       </div>
     </section>
 
-    <!-- Шаг 3 -->
-    <section class="step" id="example">
-      <h2>3) Пример с условием</h2>
-      <p>Представим, что мы хотим задавать вопрос о брендах спортивной одежды только тем, кто интересуется спортом.</p>
-      <div class="example">
-        <p><strong>q5:</strong> «Какие бренды спортивной одежды вы знаете?»</p>
-        <p><strong>Фильтр:</strong> <code>ASK q5 IF likes_sport = 1</code></p>
-      </div>
-      <p class="meta"><strong>Проверь себя:</strong></p>
-      <div class="block-checks">
-        <label><input type="checkbox" class="progress-check"> Условный вопрос q5 создан</label>
-        <label><input type="checkbox" class="progress-check"> Фильтр работает корректно</label>
-      </div>
-    </section>
+
 
     <!-- Итог -->
     <section class="step" id="checklist">
