@@ -74,10 +74,10 @@
   <main class="doc">
     <!-- Шаг 1 -->
     <section class="step" id="hidden">
-      <h2>1) Создайте скрытую переменную</h2>
+      <h2>1) Создайте скрытую переменную типа Multiple choiceh2>
       <p>Она будет определять, какой список показывать респонденту.</p>
       <div class="example">
-        <p><strong>Пример:</strong> переменная <code>age_group</code></p>
+        <p><strong>Пример:</strong> переменная <code>q5 (m)</code></p>
       </div>
       <p class="meta"><strong>Проверь себя:</strong></p>
       <div class="block-checks">
@@ -88,14 +88,14 @@
     <!-- Шаг 2 -->
     <section class="step" id="logic">
       <h2>2) Задайте правила через панель логики (Filter → Edit)</h2>
-      <p>Используйте команду <code>SET</code>, чтобы в зависимости от значения <code>q4</code> задать переменную <code>age_group</code>.</p>
+      <p>Используйте команду <code>SET</code>, чтобы в зависимости от значения <code>q4</code> задать список в <code>q5</code>.</p>
       <div class="example">
         <p><strong>Пример:</strong></p>
         <pre>
-SET age_group = 1 IF q4 = 1
-SET age_group = 2 IF q4 = 2
-SET age_group = 3 IF q4 = 3
-SET age_group = 4 IF q4 = 4
+SET q5 = 1 IF q4 = 1
+SET q5 = 2 IF q4 = 2
+SET q5 = 3 IF q4 = 3
+SET q5 = 4 IF q4 = 3
         </pre>
       </div>
       <p class="meta"><strong>Проверь себя:</strong></p>
@@ -107,7 +107,7 @@ SET age_group = 4 IF q4 = 4
     <!-- Шаг 3 -->
     <section class="step" id="lists">
       <h2>3) Создайте динамический список</h2>
-      <p>Теперь сделайте вопрос, где варианты будут зависеть от скрытой переменной <code>age_group</code>.</p>
+      <p>Теперь сделайте вопрос, где варианты будут зависеть от скрытой переменной <code>q5</code>.<br>Используйте команду <code>Show options</code>, чтобы задать ссылку на вопрос q5. <br>Важно, чтобы в q6 присутствовал полный список как в q5. </p>
       <div class="example">
         <p><strong>Пример:</strong> Вопрос «Какие бренды напитков вы знаете?»</p>
         <ul>
